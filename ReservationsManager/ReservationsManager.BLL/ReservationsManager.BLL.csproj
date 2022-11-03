@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReservationsManager.Common\ReservationsManager.Common.csproj" />
+    <ProjectReference Include="..\ReservationsManager.DAL\ReservationsManager.DAL.csproj" />
+    <ProjectReference Include="..\ReservationsManager.Domain\ReservationsManager.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

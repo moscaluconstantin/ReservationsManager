@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>2da16b73-9fde-40af-bf09-0dee13ad1953</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\ReservationsManager.BLL\ReservationsManager.BLL.csproj" />
+		<ProjectReference Include="..\ReservationsManager.Common\ReservationsManager.Common.csproj" />
+		<ProjectReference Include="..\ReservationsManager.DAL\ReservationsManager.DAL.csproj" />
+		<ProjectReference Include="..\ReservationsManager.Domain\ReservationsManager.Domain.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalVisibleTo Include="ReservationsManager.Tests" />
+	</ItemGroup>
+
+</Project>

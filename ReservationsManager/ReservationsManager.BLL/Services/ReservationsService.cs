@@ -4,7 +4,6 @@ using ReservationsManager.Common.Dtos.Reservations;
 using ReservationsManager.Common.Dtos.TimeBlocks;
 using ReservationsManager.DAL.Interfaces;
 using ReservationsManager.Domain;
-using System.Collections;
 
 namespace ReservationsManager.BLL.Services
 {
@@ -29,9 +28,8 @@ namespace ReservationsManager.BLL.Services
 
         public async Task<IEnumerable<ReservationDto>> GetAllAsync()
         {
-            var reservations = await _reservationsRepository.GetAllOrderedByDateThenByIdAsync();
-            var reservationDtos = _mapper.Map<IEnumerable<ReservationDto>>(reservations);
-
+            var reservations = await _reservationsRepository.GetAllOrderedByDateAsync();
+            var reservationDtos = ExtractReservationDtos(reservations);
             return reservationDtos;
         }
 
@@ -54,6 +52,47 @@ namespace ReservationsManager.BLL.Services
 
             await _reservationsRepository.AddRangeAsync(reservations);
             await _reservationsRepository.SaveAsync();
+        }
+
+        private IEnumerable<ReservationDto> ExtractReservationDtos(IEnumerable<Reservation> reservations)
+        {
+            var reservationDtos = new List<ReservationDto>();
+            var groupedByDateReservations = reservations.OrderBy(x => x.TimeBlockID).GroupBy(x => x.Date.Date);
+
+            foreach (var dateGroup in groupedByDateReservations)
+            {
+                var groupedByUserReservations = dateGroup.GroupBy(x => x.UserID);
+
+                foreach (var userGroup in groupedByUserReservations)
+                {
+                    var userReservations = ExtractClientReservationDtos(userGroup);
+                    reservationDtos.AddRange(userReservations);
+                }
+            }
+
+            return reservationDtos;
+        }
+
+        private ReservationDto[] ExtractClientReservationDtos(IGrouping<int, Reservation> userGroup)
+        {
+            var userReservations = userGroup.ToArray();
+            var ReservationDtos = new List<ReservationDto>();
+            int startIndex = 0;
+
+            for (int i = 0; i < userReservations.Length; i++)
+            {
+                if (i != startIndex)
+                    continue;
+
+                int endIndex = startIndex + userReservations[startIndex].ActionEmployee.Duration - 1;
+                var reservationDto = _mapper.Map<ReservationDto>(userReservations[startIndex]);
+                reservationDto.EndTime = userReservations[endIndex].TimeBlock.EndTime;
+                ReservationDtos.Add(reservationDto);
+                
+                startIndex = endIndex + 1;
+            }
+
+            return ReservationDtos.ToArray();
         }
 
         private Reservation[] CreateReservationsByDto(ReservationToAddDto reservationToAddDto, IEnumerable<TimeBlock> timeBlocks, int duration)

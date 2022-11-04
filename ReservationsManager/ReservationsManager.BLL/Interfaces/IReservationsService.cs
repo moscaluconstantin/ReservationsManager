@@ -6,7 +6,7 @@ namespace ReservationsManager.BLL.Interfaces
 {
     public interface IReservationsService
     {
-        Task<IEnumerable<Reservation>> GetAllAsync();
+        Task<IEnumerable<ReservationDto>> GetAllAsync();
         Task<IEnumerable<TimeBlockDto>> GetAvailableTimeBlocksAsync(AvailableTimeBlocksRequestDto requestDto);
         Task AddReservation(ReservationToAddDto reservationToAddDto);
     }

@@ -8,8 +8,11 @@ namespace ReservationsManager.BLL.Profiles
     {
         public ReservationProfile()
         {
-            CreateMap<ReservationToAddDto, Reservation>()
-                .ForMember(x => x.TimeBlockID, y => y.MapFrom(z => z.StartTimeBlockId));
+            CreateMap<ReservationToAddDto, Reservation>();
+            CreateMap<Reservation, ReservationDto>()
+                .ForMember(x => x.ClientName, y => y.MapFrom(z => z.User.UserName))
+                .ForMember(x => x.EmployeeName, y => y.MapFrom(z => z.ActionEmployee.Employee.UserName))
+                .ForMember(x => x.StartTime, y => y.MapFrom(z => z.TimeBlock.StartTime));
         }
     }
 }

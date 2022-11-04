@@ -15,7 +15,7 @@ namespace ReservationsManager.API.Controllers
             _reservationsService = reservationsService;
 
         [HttpGet]
-        public async Task<IEnumerable<Reservation>> GetAll() =>
+        public async Task<IEnumerable<ReservationDto>> GetAll() =>
             await _reservationsService.GetAllAsync();
 
         [HttpGet("AvailableTimeBlocks")]

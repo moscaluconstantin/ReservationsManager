@@ -27,8 +27,13 @@ namespace ReservationsManager.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Reservation>> GetAllAsync() =>
-            await _reservationsRepository.GetAllAsync();
+        public async Task<IEnumerable<ReservationDto>> GetAllAsync()
+        {
+            var reservations = await _reservationsRepository.GetAllOrderedByDateThenByIdAsync();
+            var reservationDtos = _mapper.Map<IEnumerable<ReservationDto>>(reservations);
+
+            return reservationDtos;
+        }
 
         public async Task<IEnumerable<TimeBlockDto>> GetAvailableTimeBlocksAsync(AvailableTimeBlocksRequestDto requestDto)
         {
@@ -41,17 +46,26 @@ namespace ReservationsManager.BLL.Services
 
         public async Task AddReservation(ReservationToAddDto reservationToAddDto)
         {
-            var baseReservation = _mapper.Map<Reservation>(reservationToAddDto);
-            var actionEmployee = await _actionEmployeesRepository.GetByIdAsync(baseReservation.ActionEmployeeID);
+            var actionEmployee = await _actionEmployeesRepository.GetByIdAsync(reservationToAddDto.ActionEmployeeId);
+            var timeBlocks = await _timeBlocksRepository.GetAllAsync();
             int duration = actionEmployee.Duration;
 
-            for (int i = 0; i < duration; i++)
+            Reservation[] reservations = CreateReservationsByDto(reservationToAddDto, timeBlocks, duration);
+
+            await _reservationsRepository.AddRangeAsync(reservations);
+            await _reservationsRepository.SaveAsync();
+        }
+
+        private Reservation[] CreateReservationsByDto(ReservationToAddDto reservationToAddDto, IEnumerable<TimeBlock> timeBlocks, int duration)
+        {
+            var reservations = new Reservation[duration];
+            for (int i = 0; i < reservations.Length; i++)
             {
-                await _reservationsRepository.AddAsync(baseReservation);
-                baseReservation.TimeBlockID++;
+                reservations[i] = _mapper.Map<Reservation>(reservationToAddDto);
+                reservations[i].TimeBlock = timeBlocks.FirstOrDefault(x => x.Id == reservationToAddDto.StartTimeBlockId + i);
             }
 
-            await _reservationsRepository.SaveAsync();
+            return reservations;
         }
 
         private async Task<List<TimeBlock>> GetFreeTimeBlocks(int employeeId, DateTime date)

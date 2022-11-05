@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ReservationsManager.Domain;
+using ReservationsManager.Domain.Models;
 
 namespace EFCoreMappingApp.Configurations
 {

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using ReservationsManager.Common;
 using System.Net;
-using Action = ReservationsManager.Domain.Action;
+using Action = ReservationsManager.Domain.Models.Action;
 
 namespace ReservationsManager.Tests.IntegrationTests
 {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ReservationsManager.Common.Dtos.ActionEmployees;
-using ReservationsManager.Domain;
+using ReservationsManager.Domain.Models;
 
 namespace ReservationsManager.BLL.Profiles
 {

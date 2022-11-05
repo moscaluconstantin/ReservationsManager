@@ -3,7 +3,7 @@ using ReservationsManager.API.Controllers;
 using ReservationsManager.Common;
 using ReservationsManager.DAL.Interfaces;
 using System.Net;
-using Action = ReservationsManager.Domain.Action;
+using Action = ReservationsManager.Domain.Models.Action;
 
 namespace ReservationsManager.Tests.UnitTests
 {

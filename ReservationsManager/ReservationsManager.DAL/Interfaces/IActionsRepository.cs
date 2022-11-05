@@ -1,4 +1,4 @@
-﻿using Action = ReservationsManager.Domain.Action;
+﻿using Action = ReservationsManager.Domain.Models.Action;
 
 namespace ReservationsManager.DAL.Interfaces
 {

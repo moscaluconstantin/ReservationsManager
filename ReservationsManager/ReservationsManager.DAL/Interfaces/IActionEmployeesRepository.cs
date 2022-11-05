@@ -1,4 +1,4 @@
-﻿using ReservationsManager.Domain;
+﻿using ReservationsManager.Domain.Models;
 
 namespace ReservationsManager.DAL.Interfaces
 {

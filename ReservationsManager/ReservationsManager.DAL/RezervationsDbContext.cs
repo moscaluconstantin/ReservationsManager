@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ReservationsManager.Domain;
+using ReservationsManager.Domain.Models;
 using System.Reflection;
-using Action = ReservationsManager.Domain.Action;
+using Action = ReservationsManager.Domain.Models.Action;
 
 namespace EFCoreMappingApp
 {

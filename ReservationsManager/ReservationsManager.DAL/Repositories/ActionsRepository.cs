@@ -1,6 +1,6 @@
 ﻿using EFCoreMappingApp;
 using ReservationsManager.DAL.Interfaces;
-using Action = ReservationsManager.Domain.Action;
+using Action = ReservationsManager.Domain.Models.Action;
 
 namespace ReservationsManager.DAL.Repositories
 {

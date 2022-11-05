@@ -1,4 +1,4 @@
-﻿namespace ReservationsManager.Domain
+﻿namespace ReservationsManager.Domain.Models
 {
     public class Reservation : Entity
     {

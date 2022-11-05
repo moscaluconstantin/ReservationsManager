@@ -1,7 +1,7 @@
 ﻿using EFCoreMappingApp;
 using Microsoft.EntityFrameworkCore;
 using ReservationsManager.DAL.Interfaces;
-using ReservationsManager.Domain;
+using ReservationsManager.Domain.Models;
 using System.Linq.Expressions;
 
 namespace ReservationsManager.DAL.Repositories

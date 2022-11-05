@@ -3,7 +3,7 @@ using ReservationsManager.BLL.Interfaces;
 using ReservationsManager.Common.Dtos.Reservations;
 using ReservationsManager.Common.Dtos.TimeBlocks;
 using ReservationsManager.DAL.Interfaces;
-using ReservationsManager.Domain;
+using ReservationsManager.Domain.Models;
 
 namespace ReservationsManager.BLL.Services
 {

@@ -12,7 +12,7 @@ namespace ReservationsManager.DAL.Repositories
         }
 
         public async Task<IEnumerable<Reservation>> GetAllOrderedByDateAsync() =>
-            await _context.Set<Reservation>()
+            await _context.Reservations
             .Include(x=>x.User)
             .Include(x=>x.ActionEmployee.Employee)
             .Include(x=>x.TimeBlock)
@@ -20,7 +20,7 @@ namespace ReservationsManager.DAL.Repositories
             .ToListAsync();
 
         public async Task<IEnumerable<TimeBlock>> GetReservedTimeBlockByEmployeeIdAsync(int employeeId, DateTime date) =>
-            await _context.Set<Reservation>()
+            await _context.Reservations
                 .Include(x => x.TimeBlock)
                 .Include(x => x.ActionEmployee)
                 .Where(x => x.ActionEmployee.EmployeeID == employeeId && x.Date.Date.CompareTo(date.Date) == 0)

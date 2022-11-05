@@ -12,7 +12,7 @@ namespace ReservationsManager.DAL.Repositories
         }
 
         public async Task<IEnumerable<ActionEmployee>> GetAllByEmployeeIdAsync(int employeeId) =>
-            await _context.Set<ActionEmployee>()
+            await _context.ActionEmployees
             .Include(x=>x.Action)
             .Where(x => x.EmployeeID == employeeId).ToListAsync();
     }

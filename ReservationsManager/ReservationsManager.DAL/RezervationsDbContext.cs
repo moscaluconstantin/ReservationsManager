@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ReservationsManager.Domain.Auth;
 using ReservationsManager.Domain.Models;
 using System.Reflection;
@@ -6,7 +8,7 @@ using Action = ReservationsManager.Domain.Models.Action;
 
 namespace EFCoreMappingApp
 {
-    public class RezervationsDbContext : DbContext
+    public class RezervationsDbContext : IdentityDbContext<IdentityUser>
     {
         private readonly string _connection;
 
@@ -21,8 +23,12 @@ namespace EFCoreMappingApp
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder) => 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
 
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Action> Actions { get; set; }

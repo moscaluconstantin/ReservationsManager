@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using ReservationsManager.BLL.Interfaces;
 using ReservationsManager.Common.Exceptions;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -23,14 +24,17 @@ namespace ReservationsManager.BLL.Services
 
         public string Generate(int id, string role)
         {
+            var claims = new List<Claim>() { new Claim(ClaimTypes.Role, role) };
+            return Generate(id.ToString(), claims);
+        }
+
+        public string Generate(string issuer, List<Claim> claims)
+        {
             var symmetricSecurityKey = new SymmetricSecurityKey(_key);
             var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
             var header = new JwtHeader(credentials);
 
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Role, role));
-
-            var payload = new JwtPayload(id.ToString(), null, claims, null, DateTime.Now.AddHours(_duration));
+            var payload = new JwtPayload(issuer, null, claims, null, DateTime.Now.AddHours(_duration));
             var securityToken = new JwtSecurityToken(header, payload);
 
             return new JwtSecurityTokenHandler().WriteToken(securityToken);

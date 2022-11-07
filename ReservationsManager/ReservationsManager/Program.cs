@@ -1,5 +1,8 @@
 using EFCoreMappingApp;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ReservationsManager.BLL;
 using ReservationsManager.BLL.Interfaces;
@@ -29,6 +32,15 @@ builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IActionEmployeesService, ActionEmployeesService>();
 builder.Services.AddScoped<IReservationsService, ReservationsService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+// For Entity Framework
+builder.Services.AddDbContext<RezervationsDbContext>(options => options.UseSqlServer(connectionString));
+
+// For Identity
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<RezervationsDbContext>()
+    .AddDefaultTokenProviders();
+
 
 var jwtSecretKey = builder.Configuration.GetValue<string>("Jwt:SecretKey");
 builder.Services.AddAuthentication(item =>

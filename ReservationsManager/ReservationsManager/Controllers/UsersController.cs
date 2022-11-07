@@ -4,7 +4,7 @@ using ReservationsManager.BLL.Interfaces;
 
 namespace ReservationsManager.API.Controllers
 {
-    [Authorize(Roles = "User")]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase

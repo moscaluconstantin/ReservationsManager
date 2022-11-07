@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ReservationsManager.Domain.Auth;
 using ReservationsManager.Domain.Models;
 using System.Reflection;
 using Action = ReservationsManager.Domain.Models.Action;
@@ -29,5 +30,6 @@ namespace EFCoreMappingApp
         public DbSet<TimeBlock> TimeBlocks { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<UserCredential> UserCredentials { get; set; }
     }
 }

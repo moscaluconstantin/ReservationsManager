@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ReservationsManager.BLL.Interfaces;
 
 namespace ReservationsManager.API.Controllers
 {
+    [Authorize(Roles = "User")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly IUsersService _usersService;
 
-        public UsersController(IUsersService usersService) => 
+        public UsersController(IUsersService usersService) =>
             _usersService = usersService;
 
         [HttpGet]

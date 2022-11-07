@@ -1,9 +1,12 @@
 using EFCoreMappingApp;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using ReservationsManager.BLL;
 using ReservationsManager.BLL.Interfaces;
 using ReservationsManager.BLL.Services;
 using ReservationsManager.DAL.Interfaces;
 using ReservationsManager.DAL.Repositories;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,12 +21,32 @@ builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
 builder.Services.AddScoped<IActionEmployeesRepository, ActionEmployeesRepository>();
 builder.Services.AddScoped<ITimeBlocksRepository, TimeBlocksRepository>();
+builder.Services.AddScoped<IUserCredentialsRepository, UserCredentialsRepository>();
 
 //Services
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IActionEmployeesService, ActionEmployeesService>();
 builder.Services.AddScoped<IReservationsService, ReservationsService>();
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+var jwtSecretKey = builder.Configuration.GetValue<string>("Jwt:SecretKey");
+builder.Services.AddAuthentication(item =>
+{
+    item.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    item.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(item =>
+{
+    item.RequireHttpsMetadata = true;
+    item.SaveToken = true;
+    item.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
 
 builder.Services.AddAutoMapper(typeof(BllAssemblyMarker));
 builder.Services.AddControllers();
@@ -43,6 +66,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

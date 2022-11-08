@@ -29,7 +29,6 @@ namespace ReservationsManager.API.Extentions
             services.AddScoped<IEmployeesRepository, EmployeesRepository>();
             services.AddScoped<IActionEmployeesRepository, ActionEmployeesRepository>();
             services.AddScoped<ITimeBlocksRepository, TimeBlocksRepository>();
-            services.AddScoped<IUserCredentialsRepository, UserCredentialsRepository>();
         }
 
         public static void AddServices(this IServiceCollection services)
@@ -39,6 +38,7 @@ namespace ReservationsManager.API.Extentions
             services.AddScoped<IActionEmployeesService, ActionEmployeesService>();
             services.AddScoped<IReservationsService, ReservationsService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
+            services.AddScoped<IAuthenticateService, AuthenticateService>();
         }
 
         public static void AddJwtAuthentication(this IServiceCollection services, ConfigurationManager configuration)

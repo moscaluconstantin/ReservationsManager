@@ -20,7 +20,7 @@ export class AccountService {
 
   login(userForLoginDto: UserForLogin): Observable<BearerToken> {
     return this.http.post<BearerToken>(
-      this.baseUrl + 'login/',
+      this.baseUrl + 'authenticate/login',
       userForLoginDto
     );
   }

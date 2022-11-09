@@ -1,7 +1,6 @@
-:host {
-  display: flex;
-  justify-content: center;
-  margin: 100px 0px;
+mat-card {
+  margin: 100px auto -80px auto;
+  width: 320px;
 }
 
 .mat-form-field {
@@ -10,9 +9,15 @@
 }
 
 mat-card-title,
-mat-card-content {
+.card-top-content,
+.card-bottom-line {
   display: flex;
   justify-content: center;
+}
+
+mat-card-content a {
+  display: block;
+  margin: 10px 0;
 }
 
 .error {

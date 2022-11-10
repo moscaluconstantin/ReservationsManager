@@ -51,9 +51,7 @@ namespace ReservationsManager.BLL.Services
 
         public async Task Register(RegisterModel userForRegisterDto, string role)
         {
-            var userExists = await _userManager.FindByNameAsync(userForRegisterDto.Username);
-
-            if (userExists != null)
+            if (await CheckUsernameAvailability(userForRegisterDto.Username))
                 throw new RegisterExistingUserException();
 
             IdentityUser user = new()
@@ -70,6 +68,9 @@ namespace ReservationsManager.BLL.Services
 
             await AddRoleToUser(user, role);
         }
+
+        public async Task<bool> CheckUsernameAvailability(string username) =>
+            await _userManager.FindByNameAsync(username) == null;
 
         private async Task AddRoleToUser(IdentityUser user, string role)
         {

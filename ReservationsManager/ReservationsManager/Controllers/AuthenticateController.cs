@@ -67,5 +67,10 @@ namespace ReservationsManager.API.Controllers
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
+
+        [HttpGet]
+        [Route("IsAvailable/{username}")]
+        public async Task<bool> IsAvailable(string username) =>
+            await _authService.CheckUsernameAvailability(username);
     }
 }

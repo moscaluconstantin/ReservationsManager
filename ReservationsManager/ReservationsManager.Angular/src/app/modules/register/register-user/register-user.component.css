@@ -1,0 +1,21 @@
+form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+  margin: 60px auto;
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+button {
+  float: right;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 13px;
+}

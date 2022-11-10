@@ -1,1 +1,107 @@
-<p>register-user works!</p>
+<form [formGroup]="userRegisterForm" (submit)="register()">
+  <h1>Become our client</h1>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" placeholder="Enter your name" />
+    <mat-error *ngIf="name && name.hasError('required')"
+      >You must enter your name</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Phone number</mat-label>
+    <span matPrefix>+373 &nbsp;</span>
+    <input
+      matInput
+      formControlName="phoneNumber"
+      placeholder="Enter your phone number"
+    />
+
+    <mat-error *ngIf="phoneNumber && phoneNumber.hasError('required')"
+      >You must enter your phone number</mat-error
+    >
+    <mat-error
+      *ngIf="
+        phoneNumber &&
+        !phoneNumber.hasError('required') &&
+        phoneNumber.hasError('phoneNumber')
+      "
+      >Invalid phone number (8 digits)</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" placeholder="Enter your email" />
+    <mat-error *ngIf="email && email.hasError('email')"
+      >Invalid email address</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Username</mat-label>
+    <input
+      matInput
+      formControlName="username"
+      placeholder="Enter your username"
+    />
+    <mat-hint *ngIf="userRegisterForm.pending"> Chencking username </mat-hint>
+    <mat-error *ngIf="username && username.hasError('required')"
+      >You must enter your username</mat-error
+    >
+    <mat-error *ngIf="username && username.hasError('uniqueUsername')"
+      >This username is already used</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Password</mat-label>
+    <input
+      matInput
+      formControlName="password"
+      placeholder="Enter your password"
+      type="password"
+    />
+
+    <mat-error *ngIf="password && password.hasError('required')"
+      >You must enter your password</mat-error
+    >
+    <mat-error *ngIf="password && password.hasError('invalidPassword')"
+      >One digit, upercase, lowercase, non alphanumeric an length >=
+      6</mat-error
+    >
+    <mat-error *ngIf="password && password.invalid">Invalid</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Confirm password</mat-label>
+    <input
+      matInput
+      formControlName="confirmPassword"
+      placeholder="Enter your password one more time"
+      type="password"
+    />
+
+    <mat-error *ngIf="confirmPassword && confirmPassword.hasError('required')"
+      >You must confirm your password</mat-error
+    >
+    <mat-error
+      *ngIf="confirmPassword && confirmPassword.hasError('confirmPassword')"
+      >Passwords dont match1</mat-error
+    >
+    <mat-error *ngIf="userRegisterForm.hasError('confirmPassword')"
+      >Passwords dont match2</mat-error
+    >
+  </mat-form-field>
+
+  <p *ngIf="error">{{ error }}</p>
+
+  <button
+    mat-button
+    [disabled]="!userRegisterForm.valid || registrationInProccess"
+  >
+    Register
+  </button>
+  <mat-spinner *ngIf="registrationInProccess"></mat-spinner>
+</form>

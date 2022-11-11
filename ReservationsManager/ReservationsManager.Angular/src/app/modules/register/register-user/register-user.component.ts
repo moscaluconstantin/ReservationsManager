@@ -13,7 +13,7 @@ import {
   passwordValidator,
   phoneNumberValidator,
   UniqueUsernameValidator,
-} from 'src/CustomValidators';
+} from 'src/app/_common/CustomValidators';
 
 @Component({
   selector: 'app-register-user',
@@ -74,18 +74,24 @@ export class RegisterUserComponent implements OnInit {
   register(): void {
     if (this.userRegisterForm.invalid) return;
 
+    this.error = null;
     this.registrationInProccess = true;
 
     let userForRegister = this.userRegisterForm.value as UserForRegister;
 
-    this.accountService
-      .registerUser(userForRegister)
-      .subscribe((x) => this.onRegistrationCompleted(x));
+    this.accountService.registerUser(userForRegister).subscribe({
+      next: this.onRegistrationCompleted,
+      error: (error: any) => {
+        this.error = error;
+        this.registrationInProccess = false;
+      },
+      complete: () => {
+        this.registrationInProccess = false;
+      },
+    });
   }
 
   private onRegistrationCompleted(status: boolean): void {
-    this.registrationInProccess = false;
-
     this.error = status ? null : 'Failed to registrate user.';
 
     if (status) {

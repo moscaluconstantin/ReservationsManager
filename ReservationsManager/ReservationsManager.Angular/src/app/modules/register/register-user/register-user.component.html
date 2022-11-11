@@ -53,6 +53,9 @@
     <mat-error *ngIf="username && username.hasError('uniqueUsername')"
       >This username is already used</mat-error
     >
+    <mat-error *ngIf="username && username.hasError('lostConnection')"
+      >Can't connect to server</mat-error
+    >
   </mat-form-field>
 
   <mat-form-field appearance="fill">
@@ -104,3 +107,5 @@
   </button>
   <mat-spinner *ngIf="registrationInProccess"></mat-spinner>
 </form>
+
+<p *ngIf="error">Somthing went wrong. Please try again.</p>

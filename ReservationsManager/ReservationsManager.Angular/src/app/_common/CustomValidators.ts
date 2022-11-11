@@ -4,8 +4,9 @@ import {
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
-import { map, Observable } from 'rxjs';
-import { AccountService } from './app/_services/Account/account.service';
+import { catchError, map, Observable } from 'rxjs';
+import { handleError } from './ObservableErrorHandlers';
+import { AccountService } from '../_services/Account/account.service';
 
 export const confirmPasswordValidator: ValidatorFn = (
   control: AbstractControl
@@ -53,13 +54,16 @@ export function phoneNumberValidator(expectedLength: number): ValidatorFn {
 export class UniqueUsernameValidator {
   static createValidator(accountService: AccountService): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      return accountService
-        .chackUsernameAvailability(control.value)
-        .pipe(
-          map((isAvailable: boolean) =>
-            isAvailable ? null : { uniqueUsername: true }
-          )
-        );
+      return accountService.chackUsernameAvailability(control.value).pipe(
+        map((isAvailable: boolean) =>
+          isAvailable ? null : { uniqueUsername: true }
+        ),
+        catchError(
+          handleError<ValidationErrors>('Calling server', {
+            lostConnection: true,
+          })
+        )
+      );
     };
   }
 }

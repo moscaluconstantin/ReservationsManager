@@ -10,16 +10,24 @@ import { AccountService } from './app/_services/Account/account.service';
 export const confirmPasswordValidator: ValidatorFn = (
   control: AbstractControl
 ): ValidationErrors | null => {
-  const password = control.get('password')?.value;
-  const secondPassword = control.get('confirmPassword')?.value;
+  const confirmPasswordControl = control.get('confirmPassword');
 
-  return password != secondPassword ? { confirmPassword: true } : null;
+  const password: string = control.get('password')?.value;
+  const secondPassword: string = confirmPasswordControl?.value;
+
+  const identicalPasswords = password.length > 0 && password == secondPassword;
+
+  if (!confirmPasswordControl?.errors?.['required'] && !identicalPasswords) {
+    confirmPasswordControl?.setErrors({ confirmPassword: true });
+  }
+
+  return identicalPasswords ? null : { confirmPassword: true };
 };
 
 export function passwordValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    let password: string = control.value;
     let invalid = false;
+    let password: string = control.value;
 
     if (password.length < 8) invalid = true;
     if (!/\d/.test(password)) invalid = true;

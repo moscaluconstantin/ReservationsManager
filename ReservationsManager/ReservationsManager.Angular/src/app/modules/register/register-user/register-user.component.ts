@@ -34,7 +34,7 @@ export class RegisterUserComponent implements OnInit {
         Validators.required,
         UniqueUsernameValidator.createValidator(this.accountService)
       ),
-      password: new FormControl('', [Validators.required, passwordValidator]),
+      password: new FormControl('', [Validators.required, passwordValidator()]),
       confirmPassword: new FormControl('', Validators.required),
     },
     { validators: confirmPasswordValidator }

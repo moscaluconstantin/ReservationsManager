@@ -67,11 +67,15 @@
     <mat-error *ngIf="password && password.hasError('required')"
       >You must enter your password</mat-error
     >
-    <mat-error *ngIf="password && password.hasError('invalidPassword')"
-      >One digit, upercase, lowercase, non alphanumeric an length >=
-      6</mat-error
+    <mat-error
+      *ngIf="
+        password &&
+        !password.hasError('required') &&
+        password.hasError('invalidPassword')
+      "
+      >At least: one digit, one upercase, one lowercase, one non alphanumeric
+      and 8 or more characters long</mat-error
     >
-    <mat-error *ngIf="password && password.invalid">Invalid</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="fill">
@@ -88,14 +92,9 @@
     >
     <mat-error
       *ngIf="confirmPassword && confirmPassword.hasError('confirmPassword')"
-      >Passwords dont match1</mat-error
-    >
-    <mat-error *ngIf="userRegisterForm.hasError('confirmPassword')"
-      >Passwords dont match2</mat-error
+      >Passwords dont match</mat-error
     >
   </mat-form-field>
-
-  <p *ngIf="error">{{ error }}</p>
 
   <button
     mat-button

@@ -4,7 +4,7 @@ using ReservationsManager.BLL.Interfaces;
 
 namespace ReservationsManager.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -17,7 +17,7 @@ namespace ReservationsManager.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _usersService.GetAllAsync();
+            var users = await _usersService.GetAllNativeAsync();
             return Ok(users);
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReservationsManager.BLL.Interfaces;
 using ReservationsManager.Common;
+using ReservationsManager.Common.Dtos.Auth;
 using ReservationsManager.Common.Exceptions;
 
 namespace ReservationsManager.API.Controllers
@@ -50,11 +51,11 @@ namespace ReservationsManager.API.Controllers
 
         [HttpPost]
         [Route("Register/User")]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterModel model)
+        public async Task<IActionResult> RegisterUser([FromBody] UserForRegisterDto userForRegister)
         {
             try
             {
-                await _authService.Register(model, UserRoles.User);
+                await _authService.RegisterUser(userForRegister);
             }
             catch (RegisterExistingUserException)
             {

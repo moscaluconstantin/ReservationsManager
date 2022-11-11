@@ -15,6 +15,14 @@ namespace EFCoreMappingApp.Configurations
             builder.Property(x => x.Email)
                 .HasMaxLength(50)
                 .IsRequired();
+
+            builder.Property(x => x.Name)
+                .HasMaxLength(50)
+                /*.IsRequired()*/;
+
+            builder.Property(x => x.PhoneNumber)
+                .HasMaxLength(50)
+                /*.IsRequired()*/;
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using ReservationsManager.BLL.Interfaces;
+using ReservationsManager.Common.Dtos.Auth;
 using ReservationsManager.Common.Dtos.Users;
 using ReservationsManager.DAL.Interfaces;
+using ReservationsManager.Domain.Models;
 
 namespace ReservationsManager.BLL.Services
 {
@@ -21,6 +23,16 @@ namespace ReservationsManager.BLL.Services
             var users = await _repository.GetAllAsync();
             var userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
             return userDtos;
+        }
+
+        public async Task<IEnumerable<User>> GetAllNativeAsync() =>
+            await _repository.GetAllAsync();
+
+        public async Task AddUser(UserForRegisterDto userForRegisterDto)
+        {
+            var user = _mapper.Map<User>(userForRegisterDto);
+            await _repository.AddAsync(user);
+            await _repository.SaveAsync();
         }
     }
 }

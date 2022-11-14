@@ -1,5 +1,5 @@
 <form [formGroup]="userRegisterForm" (submit)="register()">
-  <h1>Become our client</h1>
+  <h1 class="mat-display-1">Become our client</h1>
 
   <mat-form-field appearance="fill">
     <mat-label>Name</mat-label>
@@ -108,4 +108,4 @@
   <mat-spinner *ngIf="registrationInProccess"></mat-spinner>
 </form>
 
-<p *ngIf="error">Somthing went wrong. Please try again.</p>
+<p class="mat-body-1" *ngIf="error">Somthing went wrong. Please try again.</p>

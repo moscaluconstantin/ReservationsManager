@@ -1,11 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { catchError } from 'rxjs';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { UserForRegister } from 'src/app/_models/Account/UserForRegister';
 import { AccountService } from 'src/app/_services/Account/account.service';
 import {
@@ -14,6 +8,7 @@ import {
   phoneNumberValidator,
   UniqueUsernameValidator,
 } from 'src/app/_common/CustomValidators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-user',
@@ -21,21 +16,21 @@ import {
   styleUrls: ['./register-user.component.css'],
 })
 export class RegisterUserComponent implements OnInit {
-  userRegisterForm = new FormGroup(
+  userRegisterForm = this.fb.group(
     {
-      name: new FormControl('', Validators.required),
-      phoneNumber: new FormControl('', [
+      name: this.fb.control('', Validators.required),
+      phoneNumber: this.fb.control('', [
         Validators.required,
         phoneNumberValidator(8),
       ]),
-      email: new FormControl('', Validators.email),
-      username: new FormControl(
+      email: this.fb.control('', Validators.email),
+      username: this.fb.control(
         '',
         Validators.required,
         UniqueUsernameValidator.createValidator(this.accountService)
       ),
-      password: new FormControl('', [Validators.required, passwordValidator()]),
-      confirmPassword: new FormControl('', Validators.required),
+      password: this.fb.control('', [Validators.required, passwordValidator()]),
+      confirmPassword: this.fb.control('', Validators.required),
     },
     { validators: confirmPasswordValidator }
   );
@@ -67,7 +62,11 @@ export class RegisterUserComponent implements OnInit {
     return this.userRegisterForm.get('confirmPassword');
   }
 
-  constructor(private accountService: AccountService) {}
+  constructor(
+    private accountService: AccountService,
+    private fb: FormBuilder,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
@@ -78,6 +77,7 @@ export class RegisterUserComponent implements OnInit {
     this.registrationInProccess = true;
 
     let userForRegister = this.userRegisterForm.value as UserForRegister;
+    userForRegister.phoneNumber = `+373${userForRegister.phoneNumber}`;
 
     this.accountService.registerUser(userForRegister).subscribe({
       next: this.onRegistrationCompleted,
@@ -96,6 +96,7 @@ export class RegisterUserComponent implements OnInit {
 
     if (status) {
       console.log('Redirecting to login page.');
+      this.router.navigate(['/login']);
     }
   }
 }

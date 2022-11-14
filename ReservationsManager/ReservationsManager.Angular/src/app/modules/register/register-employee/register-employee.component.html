@@ -1,1 +1,142 @@
-<p>register-employee works!</p>
+<form [formGroup]="registerForm" (submit)="register()">
+  <h1 class="mat-display-1">Become part of our team</h1>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" placeholder="Enter your name" />
+    <mat-error *ngIf="name && name.hasError('required')"
+      >You must enter your name</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Experience</mat-label>
+    <span matSuffix>Months</span>
+    <input
+      matInput
+      formControlName="experience"
+      placeholder="How long do you practice"
+    />
+    <mat-error *ngIf="experience && experience.hasError('required')"
+      >You must enter your experience</mat-error
+    >
+    <mat-error
+      *ngIf="
+        experience &&
+        !experience.hasError('required') &&
+        experience.hasError('pattern')
+      "
+      >Enter a valid number of months</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>About you</mat-label>
+    <textarea
+      matInput
+      formControlName="description"
+      [maxlength]="descriptionLength"
+      placeholder="Write something about you"
+    ></textarea>
+    <mat-error *ngIf="description && description.hasError('required')"
+      >You must write something about you</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Phone number</mat-label>
+    <span matPrefix>+373 &nbsp;</span>
+    <input
+      matInput
+      formControlName="phoneNumber"
+      placeholder="Enter your phone number"
+    />
+
+    <mat-error *ngIf="phoneNumber && phoneNumber.hasError('required')"
+      >You must enter your phone number</mat-error
+    >
+    <mat-error
+      *ngIf="
+        phoneNumber &&
+        !phoneNumber.hasError('required') &&
+        phoneNumber.hasError('pattern')
+      "
+      >Invalid phone number (8 digits)</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" placeholder="Enter your email" />
+    <mat-error *ngIf="email && email.hasError('email')"
+      >Invalid email address</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Username</mat-label>
+    <input
+      matInput
+      formControlName="username"
+      placeholder="Enter your username"
+    />
+    <mat-hint *ngIf="registerForm.pending"> Chencking username </mat-hint>
+    <mat-error *ngIf="username && username.hasError('required')"
+      >You must enter your username</mat-error
+    >
+    <mat-error *ngIf="username && username.hasError('uniqueUsername')"
+      >This username is already used</mat-error
+    >
+    <mat-error *ngIf="username && username.hasError('lostConnection')"
+      >Can't connect to server</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Password</mat-label>
+    <input
+      matInput
+      formControlName="password"
+      placeholder="Enter your password"
+      type="password"
+    />
+
+    <mat-error *ngIf="password && password.hasError('required')"
+      >You must enter your password</mat-error
+    >
+    <mat-error
+      *ngIf="
+        password &&
+        !password.hasError('required') &&
+        password.hasError('invalidPassword')
+      "
+      >At least: one digit, one upercase, one lowercase, one non alphanumeric
+      and 8 or more characters long</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Confirm password</mat-label>
+    <input
+      matInput
+      formControlName="confirmPassword"
+      placeholder="Enter your password one more time"
+      type="password"
+    />
+
+    <mat-error *ngIf="confirmPassword && confirmPassword.hasError('required')"
+      >You must confirm your password</mat-error
+    >
+    <mat-error
+      *ngIf="confirmPassword && confirmPassword.hasError('confirmPassword')"
+      >Passwords dont match</mat-error
+    >
+  </mat-form-field>
+
+  <button mat-button [disabled]="!registerForm.valid || registrationInProccess">
+    Register
+  </button>
+  <mat-spinner *ngIf="registrationInProccess"></mat-spinner>
+</form>
+
+<p class="mat-body-1" *ngIf="error">Somthing went wrong. Please try again.</p>

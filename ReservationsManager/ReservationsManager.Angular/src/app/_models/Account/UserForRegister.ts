@@ -1,7 +1,3 @@
-export interface UserForRegister {
-  name: string;
-  phoneNumber: string;
-  email?: string;
-  username: string;
-  password: string;
-}
+import { BasicDataForRegister } from './BasicDataForRegister';
+
+export interface UserForRegister extends BasicDataForRegister {}

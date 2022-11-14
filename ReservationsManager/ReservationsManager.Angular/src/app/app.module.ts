@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { LoginModule } from './modules/login/login.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RegisterUserModule } from './modules/register/register-user/register-user.module';
+import { RegisterEmployeeModule } from './modules/register/register-employee/register-employee.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,6 +18,7 @@ import { RegisterUserModule } from './modules/register/register-user/register-us
     BrowserAnimationsModule,
     LoginModule,
     RegisterUserModule,
+    RegisterEmployeeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

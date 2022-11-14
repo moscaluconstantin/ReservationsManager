@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { EmployeeForRegister } from 'src/app/_models/Account/EmployeeForRegister';
 import { UserForRegister } from 'src/app/_models/Account/UserForRegister';
 import { environment } from 'src/environments/environment';
 import { BearerToken } from '../../_models/Account/BearerToken';
@@ -11,6 +12,7 @@ import { UserForLogin } from '../../_models/Account/UserForLogin';
 })
 export class AccountService {
   baseUrl = environment.apiUrl + 'authenticate/';
+  registerUrl = this.baseUrl + 'register/';
 
   constructor(private http: HttpClient) {}
 
@@ -24,9 +26,15 @@ export class AccountService {
   }
 
   registerUser(userForRegister: UserForRegister): Observable<boolean> {
+    return this.http.post<boolean>(`${this.registerUrl}user`, userForRegister);
+  }
+
+  registerEmployee(
+    employeeForRegister: EmployeeForRegister
+  ): Observable<boolean> {
     return this.http.post<boolean>(
-      `${this.baseUrl}/register/user`,
-      userForRegister
+      `${this.registerUrl}employee`,
+      employeeForRegister
     );
   }
 

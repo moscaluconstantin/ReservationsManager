@@ -6,7 +6,7 @@ namespace ReservationsManager.BLL.Interfaces
 {
     public interface IUsersService
     {
-        Task AddUser(UserForRegisterDto userForRegisterDto);
+        Task AddUserAsync(UserForRegisterDto userForRegisterDto);
         public Task<IEnumerable<UserDto>> GetAllAsync();
         Task<IEnumerable<User>> GetAllNativeAsync();
     }

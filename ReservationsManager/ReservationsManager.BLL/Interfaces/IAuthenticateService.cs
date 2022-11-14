@@ -8,6 +8,7 @@ namespace ReservationsManager.BLL.Interfaces
         Task<bool> CheckUsernameAvailability(string username);
         Task<string> Login(LoginModel userForLoginDto);
         Task Register(RegisterModel userForRegisterDtio, string role);
+        Task RegisterEmployee(EmployeeForRegisterDto employeeForRegisterDto);
         Task RegisterUser(UserForRegisterDto userForRegisterDto);
     }
 }

@@ -1,7 +1,5 @@
-﻿using EFCoreMappingApp;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ReservationsManager.BLL.Interfaces;
-using ReservationsManager.Domain;
 
 namespace ReservationsManager.API.Controllers
 {

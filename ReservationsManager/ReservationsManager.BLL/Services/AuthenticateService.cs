@@ -14,6 +14,7 @@ namespace ReservationsManager.BLL.Services
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUsersService _usersService;
+        private readonly IEmployeesService _employeesService;
         private readonly IJwtTokenService _jwtTokenService;
         private readonly IMapper _mapper;
 
@@ -21,12 +22,14 @@ namespace ReservationsManager.BLL.Services
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IUsersService usersService,
+            IEmployeesService employeesService,
             IJwtTokenService jwtTokenService,
             IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _usersService = usersService;
+            _employeesService = employeesService;
             _jwtTokenService = jwtTokenService;
             _mapper = mapper;
         }
@@ -56,12 +59,20 @@ namespace ReservationsManager.BLL.Services
             return string.Empty;
         }
 
+        public async Task RegisterEmployee(EmployeeForRegisterDto employeeForRegisterDto)
+        {
+            var registerDto = _mapper.Map<RegisterDto>(employeeForRegisterDto);
+
+            await RegisterIdentityUser(registerDto, UserRoles.Employee);
+            await _employeesService.AddEmployeeAsync(employeeForRegisterDto);
+        }
+
         public async Task RegisterUser(UserForRegisterDto userForRegisterDto)
         {
             var registerDto = _mapper.Map<RegisterDto>(userForRegisterDto);
 
             await RegisterIdentityUser(registerDto, UserRoles.User);
-            await _usersService.AddUser(userForRegisterDto);
+            await _usersService.AddUserAsync(userForRegisterDto);
         }
 
         private async Task RegisterIdentityUser(RegisterDto registerDto, string role)

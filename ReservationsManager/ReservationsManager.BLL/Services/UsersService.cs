@@ -28,7 +28,7 @@ namespace ReservationsManager.BLL.Services
         public async Task<IEnumerable<User>> GetAllNativeAsync() =>
             await _repository.GetAllAsync();
 
-        public async Task AddUser(UserForRegisterDto userForRegisterDto)
+        public async Task AddUserAsync(UserForRegisterDto userForRegisterDto)
         {
             var user = _mapper.Map<User>(userForRegisterDto);
             await _repository.AddAsync(user);

@@ -31,17 +31,17 @@ namespace ReservationsManager.API.Controllers
 
         [HttpPost]
         [Route("Register/Employee")]
-        public async Task<IActionResult> RegisterEmployee([FromBody] RegisterModel model)
+        public async Task<IActionResult> RegisterEmployee([FromBody] EmployeeForRegisterDto employeeForRegister)
         {
             try
             {
-                await _authService.Register(model, UserRoles.Employee);
+                await _authService.RegisterEmployee(employeeForRegister);
             }
             catch (RegisterExistingUserException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
             }
-            catch(InvalidCredentialsException)
+            catch (InvalidCredentialsException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
             }

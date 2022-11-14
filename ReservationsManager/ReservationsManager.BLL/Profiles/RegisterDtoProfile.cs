@@ -8,6 +8,7 @@ namespace ReservationsManager.BLL.Profiles
         public RegisterDtoProfile()
         {
             CreateMap<UserForRegisterDto, RegisterDto>();
+            CreateMap<EmployeeForRegisterDto, RegisterDto>();
         }
     }
 }

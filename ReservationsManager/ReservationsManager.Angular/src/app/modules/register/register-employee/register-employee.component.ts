@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import {
   confirmPasswordValidator,
   passwordValidator,
-  phoneNumberValidator,
   UniqueUsernameValidator,
 } from 'src/app/_common/CustomValidators';
 import { EmployeeForRegister } from 'src/app/_models/Account/EmployeeForRegister';
@@ -27,7 +26,6 @@ export class RegisterEmployeeComponent implements OnInit {
       phoneNumber: this.fb.control('', [
         Validators.required,
         Validators.pattern(/[0-9]{8}/),
-        // phoneNumberValidator(8),
       ]),
       email: this.fb.control('', Validators.email),
       username: this.fb.control(

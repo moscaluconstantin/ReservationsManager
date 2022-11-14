@@ -5,7 +5,6 @@ import { AccountService } from 'src/app/_services/Account/account.service';
 import {
   confirmPasswordValidator,
   passwordValidator,
-  phoneNumberValidator,
   UniqueUsernameValidator,
 } from 'src/app/_common/CustomValidators';
 import { Router } from '@angular/router';
@@ -21,7 +20,7 @@ export class RegisterUserComponent implements OnInit {
       name: this.fb.control('', Validators.required),
       phoneNumber: this.fb.control('', [
         Validators.required,
-        phoneNumberValidator(8),
+        Validators.pattern(/[0-9]{8}/),
       ]),
       email: this.fb.control('', Validators.email),
       username: this.fb.control(

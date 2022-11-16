@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { EmployeeForRegister } from 'src/app/_models/Account/EmployeeForRegister';
 import { UserForRegister } from 'src/app/_models/Account/UserForRegister';
 import { environment } from 'src/environments/environment';
-import { BearerToken } from '../../_models/Account/BearerToken';
+import { LoginResponse } from '../../_models/Account/LoginResponse';
 import { UserForLogin } from '../../_models/Account/UserForLogin';
 
 @Injectable({
@@ -21,8 +21,11 @@ export class AccountService {
     return token ? true : false;
   }
 
-  login(userForLoginDto: UserForLogin): Observable<BearerToken> {
-    return this.http.post<BearerToken>(this.baseUrl + 'login', userForLoginDto);
+  login(userForLoginDto: UserForLogin): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(
+      this.baseUrl + 'login',
+      userForLoginDto
+    );
   }
 
   registerUser(userForRegister: UserForRegister): Observable<boolean> {

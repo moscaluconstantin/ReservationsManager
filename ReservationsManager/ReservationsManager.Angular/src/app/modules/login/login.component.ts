@@ -34,10 +34,13 @@ export class LoginComponent implements OnInit {
 
     this.logging = true;
 
-    this.accountService.login(loginRequest).subscribe((token) => {
-      localStorage.setItem('accessToken', token.accessToken);
+    this.accountService.login(loginRequest).subscribe((response) => {
+      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('userRole', response.role);
+      localStorage.setItem('userId', response.id.toString());
+
       this.logging = false;
-      console.log(token.accessToken);
+      console.log(response);
     });
   }
 }

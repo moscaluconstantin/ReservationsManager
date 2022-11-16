@@ -21,6 +21,11 @@ export class AccountService {
     return token ? true : false;
   }
 
+  haveRole(roles: Array<string>): boolean {
+    let role = localStorage.getItem('userRole');
+    return role != null && roles.includes(role);
+  }
+
   login(userForLoginDto: UserForLogin): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(
       this.baseUrl + 'login',

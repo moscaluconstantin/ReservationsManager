@@ -8,6 +8,7 @@ import { LoginModule } from './modules/login/login.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RegisterUserModule } from './modules/register/register-user/register-user.module';
 import { RegisterEmployeeModule } from './modules/register/register-employee/register-employee.module';
+import { AuthGuard } from './_guards/auth.guard';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,7 +21,7 @@ import { RegisterEmployeeModule } from './modules/register/register-employee/reg
     RegisterUserModule,
     RegisterEmployeeModule,
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { UserForLogin } from 'src/app/_models/Account/UserForLogin';
 import { AccountService } from 'src/app/_services/Account/account.service';
 
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit {
   error: string | null = null;
   logging: boolean = false;
 
-  constructor(private accountService: AccountService) {}
+  constructor(private accountService: AccountService, private router: Router) {}
 
   ngOnInit(): void {}
 
@@ -40,7 +41,8 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('userId', response.id.toString());
 
       this.logging = false;
-      console.log(response);
+
+      this.router.navigate([`/account/${response.role.toLowerCase()}`]);
     });
   }
 }

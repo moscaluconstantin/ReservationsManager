@@ -5,10 +5,9 @@ namespace ReservationsManager.BLL.Interfaces
 {
     public interface IAuthenticateService
     {
-        Task<bool> CheckUsernameAvailability(string username);
-        Task<string> Login(LoginModel userForLoginDto);
-        Task Register(RegisterModel userForRegisterDtio, string role);
-        Task RegisterEmployee(EmployeeForRegisterDto employeeForRegisterDto);
-        Task RegisterUser(UserForRegisterDto userForRegisterDto);
+        Task<bool> CheckUsernameAvailabilityAsync(string username);
+        Task<LoginResponseDto> LoginAsync(LoginModel userForLoginDto);
+        Task RegisterEmployeeAsync(EmployeeForRegisterDto employeeForRegisterDto);
+        Task RegisterUserAsync(UserForRegisterDto userForRegisterDto);
     }
 }

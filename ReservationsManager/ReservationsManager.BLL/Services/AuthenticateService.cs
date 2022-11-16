@@ -17,6 +17,7 @@ namespace ReservationsManager.BLL.Services
         private readonly IEmployeesService _employeesService;
         private readonly IJwtTokenService _jwtTokenService;
         private readonly IMapper _mapper;
+        private Dictionary<string, IGetIdService> _getIdServices;
 
         public AuthenticateService(
             UserManager<IdentityUser> userManager,
@@ -32,9 +33,60 @@ namespace ReservationsManager.BLL.Services
             _employeesService = employeesService;
             _jwtTokenService = jwtTokenService;
             _mapper = mapper;
+
+            _getIdServices = new Dictionary<string, IGetIdService>()
+            {
+                [UserRoles.Admin] = _employeesService,
+                [UserRoles.Employee] = _employeesService,
+                [UserRoles.User] = _usersService,
+            };
         }
 
-        public async Task<string> Login(LoginModel userForLoginDto)
+        public async Task<LoginResponseDto> LoginAsync(LoginModel userForLoginDto)
+        {
+            var jwtToken = await LoginIdentityUserAsync(userForLoginDto);
+
+            if (string.IsNullOrEmpty(jwtToken))
+                return null;
+
+            var role = await GetRoleByUsernameAsync(userForLoginDto.Username);
+
+            if (string.IsNullOrEmpty(role))
+                return null;
+
+            int id = await GetIdAsync(userForLoginDto.Username, role);
+
+            if (id == -1)
+                return null;
+
+            return new LoginResponseDto()
+            {
+                AccessToken = jwtToken,
+                Role = role,
+                Id = id
+            };
+        }
+
+        public async Task RegisterEmployeeAsync(EmployeeForRegisterDto employeeForRegisterDto)
+        {
+            var registerDto = _mapper.Map<RegisterDto>(employeeForRegisterDto);
+
+            await RegisterIdentityUserAsync(registerDto, UserRoles.Employee);
+            await _employeesService.AddEmployeeAsync(employeeForRegisterDto);
+        }
+
+        public async Task RegisterUserAsync(UserForRegisterDto userForRegisterDto)
+        {
+            var registerDto = _mapper.Map<RegisterDto>(userForRegisterDto);
+
+            await RegisterIdentityUserAsync(registerDto, UserRoles.User);
+            await _usersService.AddUserAsync(userForRegisterDto);
+        }
+
+        public async Task<bool> CheckUsernameAvailabilityAsync(string username) =>
+            await _userManager.FindByNameAsync(username) == null;
+
+        private async Task<string> LoginIdentityUserAsync(LoginModel userForLoginDto)
         {
             var user = await _userManager.FindByNameAsync(userForLoginDto.Username);
 
@@ -59,25 +111,9 @@ namespace ReservationsManager.BLL.Services
             return string.Empty;
         }
 
-        public async Task RegisterEmployee(EmployeeForRegisterDto employeeForRegisterDto)
+        private async Task RegisterIdentityUserAsync(RegisterDto registerDto, string role)
         {
-            var registerDto = _mapper.Map<RegisterDto>(employeeForRegisterDto);
-
-            await RegisterIdentityUser(registerDto, UserRoles.Employee);
-            await _employeesService.AddEmployeeAsync(employeeForRegisterDto);
-        }
-
-        public async Task RegisterUser(UserForRegisterDto userForRegisterDto)
-        {
-            var registerDto = _mapper.Map<RegisterDto>(userForRegisterDto);
-
-            await RegisterIdentityUser(registerDto, UserRoles.User);
-            await _usersService.AddUserAsync(userForRegisterDto);
-        }
-
-        private async Task RegisterIdentityUser(RegisterDto registerDto, string role)
-        {
-            if (!await CheckUsernameAvailability(registerDto.Username))
+            if (!await CheckUsernameAvailabilityAsync(registerDto.Username))
                 throw new RegisterExistingUserException();
 
             IdentityUser user = new()
@@ -91,39 +127,39 @@ namespace ReservationsManager.BLL.Services
             if (!result.Succeeded)
                 throw new InvalidCredentialsException();
 
-            await AddRoleToUser(user, role);
+            await AddRoleToUserAsync(user, role);
         }
 
-        public async Task Register(RegisterModel userForRegisterDto, string role)
-        {
-            if (await CheckUsernameAvailability(userForRegisterDto.Username))
-                throw new RegisterExistingUserException();
-
-            IdentityUser user = new()
-            {
-                Email = userForRegisterDto.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = userForRegisterDto.Username
-            };
-
-            var result = await _userManager.CreateAsync(user, userForRegisterDto.Password);
-
-            if (!result.Succeeded)
-                throw new InvalidCredentialsException();
-
-            await AddRoleToUser(user, role);
-        }
-
-        public async Task<bool> CheckUsernameAvailability(string username) =>
-            await _userManager.FindByNameAsync(username) == null;
-
-        private async Task AddRoleToUser(IdentityUser user, string role)
+        private async Task AddRoleToUserAsync(IdentityUser user, string role)
         {
             if (!await _roleManager.RoleExistsAsync(role))
                 await _roleManager.CreateAsync(new IdentityRole(role));
 
             if (await _roleManager.RoleExistsAsync(role))
                 await _userManager.AddToRoleAsync(user, role);
+        }
+
+        private async Task<string> GetRoleByUsernameAsync(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+                return string.Empty;
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            if(userRoles.Count==0)
+                return string.Empty;
+
+            return userRoles[0];
+        }
+
+        private async Task<int> GetIdAsync(string username, string role)
+        {
+            if (!_getIdServices.TryGetValue(role, out var service))
+                return -1;
+            
+            return await service.GetIdByUernameAsync(username);
         }
     }
 }

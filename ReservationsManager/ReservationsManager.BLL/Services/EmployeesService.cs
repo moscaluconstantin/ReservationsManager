@@ -33,5 +33,11 @@ namespace ReservationsManager.BLL.Services
             var employeeDtos = _mapper.Map<IEnumerable<EmployeeDto>>(employees);
             return employeeDtos;
         }
+
+        public async Task<int> GetIdByUernameAsync(string username)
+        {
+            var employee = await _repository.GetByUsernameAsync(username);
+            return employee != null ? employee.Id : -1;
+        }
     }
 }

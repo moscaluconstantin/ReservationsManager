@@ -4,7 +4,7 @@ using ReservationsManager.Domain.Models;
 
 namespace ReservationsManager.BLL.Interfaces
 {
-    public interface IUsersService
+    public interface IUsersService : IGetIdService
     {
         Task AddUserAsync(UserForRegisterDto userForRegisterDto);
         public Task<IEnumerable<UserDto>> GetAllAsync();

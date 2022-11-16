@@ -19,14 +19,12 @@ namespace ReservationsManager.API.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var jwtToken = await _authService.Login(model);
+            var loginResponse = await _authService.LoginAsync(model);
 
-            if (string.IsNullOrEmpty(jwtToken))
-            {
+            if (loginResponse==null)
                 return Unauthorized();
-            }
 
-            return Ok(new { accessToken = jwtToken });
+            return Ok(loginResponse);
         }
 
         [HttpPost]
@@ -35,7 +33,7 @@ namespace ReservationsManager.API.Controllers
         {
             try
             {
-                await _authService.RegisterEmployee(employeeForRegister);
+                await _authService.RegisterEmployeeAsync(employeeForRegister);
             }
             catch (RegisterExistingUserException)
             {
@@ -55,7 +53,7 @@ namespace ReservationsManager.API.Controllers
         {
             try
             {
-                await _authService.RegisterUser(userForRegister);
+                await _authService.RegisterUserAsync(userForRegister);
             }
             catch (RegisterExistingUserException)
             {
@@ -72,6 +70,6 @@ namespace ReservationsManager.API.Controllers
         [HttpGet]
         [Route("IsAvailable/{username}")]
         public async Task<bool> IsAvailable(string username) =>
-            await _authService.CheckUsernameAvailability(username);
+            await _authService.CheckUsernameAvailabilityAsync(username);
     }
 }

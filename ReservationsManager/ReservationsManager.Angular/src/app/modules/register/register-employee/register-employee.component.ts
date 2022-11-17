@@ -93,14 +93,9 @@ export class RegisterEmployeeComponent implements OnInit {
     employeeForRegister.phoneNumber = `+373${employeeForRegister.phoneNumber}`;
 
     this.accountService.registerEmployee(employeeForRegister).subscribe({
-      next: this.onRegistrationCompleted,
-      error: (error: any) => {
-        this.error = error;
-        this.registrationInProccess = false;
-      },
-      complete: () => {
-        this.registrationInProccess = false;
-      },
+      next: (result: boolean) => this.onRegistrationCompleted(result),
+      error: (error: any) => (this.error = error),
+      complete: () => (this.registrationInProccess = false),
     });
   }
 
@@ -108,8 +103,7 @@ export class RegisterEmployeeComponent implements OnInit {
     this.error = status ? null : 'Registration failed.';
 
     if (status) {
-      console.log('Redirecting to login page.');
-      // this.router.navigate(['/login']);
+      this.router.navigate(['/login']);
     }
   }
 }

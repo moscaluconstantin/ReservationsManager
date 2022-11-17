@@ -21,10 +21,13 @@ mat-card-content a {
 }
 
 .error {
+  display: inline-block;
   padding: 16px;
-  width: 300px;
   color: white;
   background-color: red;
+
+  display: flex;
+  justify-content: center;
 }
 
 .button {

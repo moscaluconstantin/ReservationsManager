@@ -11,6 +11,9 @@
             formControlName="username"
             required
           />
+          <mat-error *ngIf="username && username.hasError('required')"
+            >You must enter your username</mat-error
+          >
         </mat-form-field>
       </p>
 
@@ -23,6 +26,9 @@
             formControlName="password"
             required
           />
+          <mat-error *ngIf="password && password.hasError('required')"
+            >You must enter your password</mat-error
+          >
         </mat-form-field>
       </p>
 
@@ -32,7 +38,9 @@
 
       <div class="button">
         <mat-spinner *ngIf="logging" diameter="30"></mat-spinner>
-        <button type="submit" mat-button>Login</button>
+        <button type="submit" mat-button [disabled]="loginForm.invalid">
+          Login
+        </button>
       </div>
     </form>
   </mat-card-content>

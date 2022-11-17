@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoginResponseDto } from 'src/app/_models/Account/LoginResponseDto';
 import { UserForLoginDto } from 'src/app/_models/Account/UserForLoginDto';
 import { AccountService } from 'src/app/_services/Account/account.service';
 
@@ -18,6 +24,14 @@ export class LoginComponent implements OnInit {
   error: string | null = null;
   logging: boolean = false;
 
+  get username(): AbstractControl | null {
+    return this.loginForm.get('username');
+  }
+
+  get password(): AbstractControl | null {
+    return this.loginForm.get('password');
+  }
+
   constructor(private accountService: AccountService, private router: Router) {}
 
   ngOnInit(): void {}
@@ -26,23 +40,24 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid || this.logging) return;
 
     let loginRequest = this.loginForm.value as UserForLoginDto;
-
-    console.log(
-      `Try login with: ${loginRequest.username} - ${loginRequest.password}`
-    );
-
-    if (this.logging) return;
-
     this.logging = true;
 
-    this.accountService.login(loginRequest).subscribe((response) => {
-      localStorage.setItem('accessToken', response.accessToken);
-      localStorage.setItem('userRole', response.role);
-      localStorage.setItem('userId', response.id.toString());
-
-      this.logging = false;
-
-      this.router.navigate([`/account/${response.role.toLowerCase()}`]);
+    this.accountService.login(loginRequest).subscribe({
+      next: (response) => {
+        this.logging = false;
+        this.saveResponse(response);
+        this.router.navigate([`/account/${response.role.toLowerCase()}`]);
+      },
+      error: (error) => {
+        this.logging = false;
+        this.error = 'Invalid username or/and password';
+      },
     });
+  }
+
+  private saveResponse(loginResponse: LoginResponseDto) {
+    localStorage.setItem('accessToken', loginResponse.accessToken);
+    localStorage.setItem('userRole', loginResponse.role);
+    localStorage.setItem('userId', loginResponse.id.toString());
   }
 }

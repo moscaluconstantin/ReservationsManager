@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { EmployeeForRegister } from 'src/app/_models/Account/EmployeeForRegister';
-import { UserForRegister } from 'src/app/_models/Account/UserForRegister';
+import { EmployeeForRegisterDto } from 'src/app/_models/Account/EmployeeForRegisterDto';
+import { UserForRegisterDto } from 'src/app/_models/Account/UserForRegisterDto';
 import { environment } from 'src/environments/environment';
-import { LoginResponse } from '../../_models/Account/LoginResponse';
-import { UserForLogin } from '../../_models/Account/UserForLogin';
+import { LoginResponseDto } from '../../_models/Account/LoginResponseDto';
+import { UserForLoginDto } from '../../_models/Account/UserForLoginDto';
 
 @Injectable({
   providedIn: 'root',
@@ -26,19 +26,19 @@ export class AccountService {
     return role != null && roles.includes(role);
   }
 
-  login(userForLoginDto: UserForLogin): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(
+  login(userForLoginDto: UserForLoginDto): Observable<LoginResponseDto> {
+    return this.http.post<LoginResponseDto>(
       this.baseUrl + 'login',
       userForLoginDto
     );
   }
 
-  registerUser(userForRegister: UserForRegister): Observable<boolean> {
+  registerUser(userForRegister: UserForRegisterDto): Observable<boolean> {
     return this.http.post<boolean>(`${this.registerUrl}user`, userForRegister);
   }
 
   registerEmployee(
-    employeeForRegister: EmployeeForRegister
+    employeeForRegister: EmployeeForRegisterDto
   ): Observable<boolean> {
     return this.http.post<boolean>(
       `${this.registerUrl}employee`,

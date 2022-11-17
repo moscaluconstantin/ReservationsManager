@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { UserForRegister } from 'src/app/_models/Account/UserForRegister';
+import { UserForRegisterDto } from 'src/app/_models/Account/UserForRegisterDto';
 import { AccountService } from 'src/app/_services/Account/account.service';
 import {
   confirmPasswordValidator,
@@ -75,7 +75,7 @@ export class RegisterUserComponent implements OnInit {
     this.error = null;
     this.registrationInProccess = true;
 
-    let userForRegister = this.userRegisterForm.value as UserForRegister;
+    let userForRegister = this.userRegisterForm.value as UserForRegisterDto;
     userForRegister.phoneNumber = `+373${userForRegister.phoneNumber}`;
 
     this.accountService.registerUser(userForRegister).subscribe({

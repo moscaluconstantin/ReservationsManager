@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserForLogin } from 'src/app/_models/Account/UserForLogin';
+import { UserForLoginDto } from 'src/app/_models/Account/UserForLoginDto';
 import { AccountService } from 'src/app/_services/Account/account.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
   login(): void {
     if (this.loginForm.invalid || this.logging) return;
 
-    let loginRequest = this.loginForm.value as UserForLogin;
+    let loginRequest = this.loginForm.value as UserForLoginDto;
 
     console.log(
       `Try login with: ${loginRequest.username} - ${loginRequest.password}`

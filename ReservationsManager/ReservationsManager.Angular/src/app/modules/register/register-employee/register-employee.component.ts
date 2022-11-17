@@ -6,7 +6,7 @@ import {
   passwordValidator,
   UniqueUsernameValidator,
 } from 'src/app/_common/CustomValidators';
-import { EmployeeForRegister } from 'src/app/_models/Account/EmployeeForRegister';
+import { EmployeeForRegisterDto } from 'src/app/_models/Account/EmployeeForRegisterDto';
 import { AccountService } from 'src/app/_services/Account/account.service';
 
 @Component({
@@ -89,7 +89,7 @@ export class RegisterEmployeeComponent implements OnInit {
     this.error = null;
     this.registrationInProccess = true;
 
-    let employeeForRegister = this.registerForm.value as EmployeeForRegister;
+    let employeeForRegister = this.registerForm.value as EmployeeForRegisterDto;
     employeeForRegister.phoneNumber = `+373${employeeForRegister.phoneNumber}`;
 
     this.accountService.registerEmployee(employeeForRegister).subscribe({

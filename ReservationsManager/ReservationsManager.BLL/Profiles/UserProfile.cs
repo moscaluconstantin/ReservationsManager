@@ -10,8 +10,8 @@ namespace ReservationsManager.BLL.Profiles
         public UserProfile()
         {
             CreateMap<UserForRegisterDto, User>();
-            CreateMap<User, UserDto>()
-                .ForMember(x => x.Name, y => y.MapFrom(z => z.UserName));
+            CreateMap<User, UserDto>();
+            CreateMap<User, UserForGreetDto>();
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReservationsManager.BLL.Interfaces;
+using ReservationsManager.Common;
 
 namespace ReservationsManager.API.Controllers
 {
-    //[Authorize]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -14,11 +15,23 @@ namespace ReservationsManager.API.Controllers
         public UsersController(IUsersService usersService) =>
             _usersService = usersService;
 
-        [HttpGet]
+        [HttpGet("All")]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _usersService.GetAllNativeAsync();
             return Ok(users);
+        }
+
+        [Authorize(Roles = UserRoles.User)]
+        [HttpGet("UserForGreet/{id}")]
+        public async Task<IActionResult> GetUserForGreet(int id)
+        {
+            var userForGreet = await _usersService.GetUserForGreet(id);
+
+            if (userForGreet == null)
+                return NotFound("Can't found user.");
+
+            return Ok(userForGreet);
         }
     }
 }

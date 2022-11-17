@@ -31,7 +31,7 @@ namespace ReservationsManager.BLL.Services
         public string Generate(string issuer, List<Claim> claims)
         {
             var symmetricSecurityKey = new SymmetricSecurityKey(_key);
-            var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
+            var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
             var header = new JwtHeader(credentials);
 
             var payload = new JwtPayload(issuer, null, claims, null, DateTime.Now.AddHours(_duration));

@@ -40,5 +40,11 @@ namespace ReservationsManager.BLL.Services
             var user = await _repository.GetByUernameAsync(username);
             return user != null ? user.Id : -1;
         }
+
+        public async Task<UserForGreetDto> GetUserForGreet(int id)
+        {
+            var user = await _repository.GetByIdAsync(id);
+            return _mapper.Map<UserForGreetDto>(user);
+        }
     }
 }

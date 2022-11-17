@@ -9,5 +9,6 @@ namespace ReservationsManager.BLL.Interfaces
         Task AddUserAsync(UserForRegisterDto userForRegisterDto);
         public Task<IEnumerable<UserDto>> GetAllAsync();
         Task<IEnumerable<User>> GetAllNativeAsync();
+        Task<UserForGreetDto> GetUserForGreet(int id);
     }
 }

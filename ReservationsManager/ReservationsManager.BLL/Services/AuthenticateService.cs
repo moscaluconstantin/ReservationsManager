@@ -5,6 +5,7 @@ using ReservationsManager.Common;
 using ReservationsManager.Common.Dtos.Auth;
 using ReservationsManager.Common.Exceptions;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 
 namespace ReservationsManager.BLL.Services
@@ -93,17 +94,7 @@ namespace ReservationsManager.BLL.Services
             if (user != null && await _userManager.CheckPasswordAsync(user, userForLoginDto.Password))
             {
                 var userRoles = await _userManager.GetRolesAsync(user);
-
-                var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }
+                var authClaims = userRoles.Select(x => new Claim(ClaimTypes.Role, x)).ToList();
 
                 return _jwtTokenService.Generate(user.Id, authClaims);
             }
@@ -148,7 +139,7 @@ namespace ReservationsManager.BLL.Services
 
             var userRoles = await _userManager.GetRolesAsync(user);
 
-            if(userRoles.Count==0)
+            if (userRoles.Count == 0)
                 return string.Empty;
 
             return userRoles[0];
@@ -158,7 +149,7 @@ namespace ReservationsManager.BLL.Services
         {
             if (!_getIdServices.TryGetValue(role, out var service))
                 return -1;
-            
+
             return await service.GetIdByUernameAsync(username);
         }
     }

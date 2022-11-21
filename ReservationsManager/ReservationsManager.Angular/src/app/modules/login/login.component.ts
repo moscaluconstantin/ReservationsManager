@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
 
   private saveResponse(loginResponse: LoginResponseDto) {
     localStorage.setItem('accessToken', loginResponse.accessToken);
-    localStorage.setItem('userRole', loginResponse.role);
-    localStorage.setItem('userId', loginResponse.id.toString());
+    localStorage.setItem('accountRole', loginResponse.role);
+    localStorage.setItem('accountId', loginResponse.id.toString());
   }
 }

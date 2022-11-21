@@ -1,3 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.navbar {
+  justify-content: space-between;
+  margin-bottom: 50px;
+}
+
+.links a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+  padding: 10px 10px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 4px;
+}
+
+.links a:hover {
+  background-color: #2e3b84;
+}
+
+.links a.active {
+  border: solid;
+  border-color: white;
+  border-width: 1px;
+  padding: 9px 9px;
+}

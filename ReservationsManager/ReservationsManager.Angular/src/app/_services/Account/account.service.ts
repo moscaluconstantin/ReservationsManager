@@ -16,13 +16,18 @@ export class AccountService {
 
   constructor(private http: HttpClient) {}
 
+  get accountId(): number {
+    let id = localStorage.getItem('accountId');
+    return id ? +id : -1;
+  }
+
   isLoggedIn(): boolean {
     const token = localStorage.getItem('accessToken');
     return token ? true : false;
   }
 
   haveRole(roles: Array<string>): boolean {
-    let role = localStorage.getItem('userRole');
+    let role = localStorage.getItem('accountRole');
     return role != null && roles.includes(role);
   }
 
@@ -31,6 +36,10 @@ export class AccountService {
       this.baseUrl + 'login',
       userForLoginDto
     );
+  }
+
+  logout(): void {
+    localStorage.removeItem('accessToken');
   }
 
   registerUser(userForRegister: UserForRegisterDto): Observable<boolean> {

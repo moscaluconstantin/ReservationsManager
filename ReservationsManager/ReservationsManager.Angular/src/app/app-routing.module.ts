@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './modules/login/login.component';
 import { RegisterEmployeeComponent } from './modules/register/register-employee/register-employee.component';
 import { RegisterUserComponent } from './modules/register/register-user/register-user.component';
-import { UserAccountComponent } from './modules/user/user-account/user-account.component';
 import { AuthGuard } from './_guards/auth.guard';
 
 const routes: Routes = [
@@ -12,7 +11,8 @@ const routes: Routes = [
   { path: 'register-employee', component: RegisterEmployeeComponent },
   {
     path: 'account/user',
-    component: UserAccountComponent,
+    loadChildren: () =>
+      import('./modules/user/user.module').then((m) => m.UserModule),
     canActivate: [AuthGuard],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },

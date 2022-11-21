@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { LoginModule } from './modules/login/login.module';
 import { RegisterUserModule } from './modules/register/register-user/register-user.module';
 import { RegisterEmployeeModule } from './modules/register/register-employee/register-employee.module';
-import { UserAccountModule } from './modules/user/user-account/user-account.module';
+import { UserModule } from './modules/user/user.module';
 import { AuthGuard } from './_guards/auth.guard';
 import { AuthInterceptor } from './_interceptors/auth.interceptor';
 
@@ -22,7 +22,7 @@ import { AuthInterceptor } from './_interceptors/auth.interceptor';
     LoginModule,
     RegisterUserModule,
     RegisterEmployeeModule,
-    UserAccountModule,
+    UserModule,
   ],
   providers: [
     AuthGuard,

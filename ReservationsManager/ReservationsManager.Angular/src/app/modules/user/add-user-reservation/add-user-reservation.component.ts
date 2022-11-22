@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { AssignedActionDto } from 'src/app/_models/Action/AssignedActionDto';
+import { AvailableTimeBlocksRequestDto } from 'src/app/_models/AvailableTimeBlocksRequestDto';
 import { WorkingEmployeeDto } from 'src/app/_models/Employee/WorkingEmployeeDto';
+import { TimeBlockDto } from 'src/app/_models/TimeBlockDto';
 import { ActionsService } from 'src/app/_services/Actions/actions.service';
 import { EmployeeService } from 'src/app/_services/Employee/employee.service';
+import { ReservationsService } from 'src/app/_services/Reservations/reservations.service';
 
 @Component({
   selector: 'app-add-user-reservation',
@@ -13,7 +16,7 @@ import { EmployeeService } from 'src/app/_services/Employee/employee.service';
 export class AddUserReservationComponent implements OnInit {
   reservationForm = this.fb.group({
     actionId: this.fb.control('', Validators.required),
-    employee: this.fb.control('', Validators.required),
+    employeeId: this.fb.control('', Validators.required),
     date: this.fb.control('', Validators.required),
     timeBlockId: this.fb.control('', Validators.required),
   });
@@ -22,8 +25,8 @@ export class AddUserReservationComponent implements OnInit {
     return this.reservationForm.controls['actionId'];
   }
 
-  get employee(): AbstractControl | null {
-    return this.reservationForm.controls['employee'];
+  get employeeId(): AbstractControl | null {
+    return this.reservationForm.controls['employeeId'];
   }
 
   get date(): AbstractControl | null {
@@ -41,26 +44,17 @@ export class AddUserReservationComponent implements OnInit {
 
   actions: Array<AssignedActionDto> = [];
   employees: Array<WorkingEmployeeDto> = [];
-  timeBlocks: TimeBlockOption[] = [
-    { id: 0, startTime: '12:30' },
-    { id: 1, startTime: '13:00' },
-    { id: 2, startTime: '16:00' },
-    { id: 3, startTime: '18:00' },
-  ];
+  timeBlocks: TimeBlockDto[] = [];
 
   private get reservationRequest(): ReservationRequest {
     return this.reservationForm.value as ReservationRequest;
   }
-  private controls: Array<AbstractControl | null> = [
-    this.employee,
-    this.date,
-    this.timeBlockId,
-  ];
 
   constructor(
     private fb: FormBuilder,
     private actionsService: ActionsService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private reservationsService: ReservationsService
   ) {}
 
   ngOnInit(): void {
@@ -74,7 +68,9 @@ export class AddUserReservationComponent implements OnInit {
   }
 
   onActionChanged(): void {
-    this.resetControls(0);
+    this.resetControl(this.employeeId);
+    this.resetControl(this.timeBlockId);
+    this.updateTimeBlocks();
 
     this.employeeService
       .getEmployeesAssignedToAction(this.reservationRequest.actionId!)
@@ -82,21 +78,37 @@ export class AddUserReservationComponent implements OnInit {
   }
 
   onEmployeeChanged(): void {
-    this.resetControls(1);
+    this.resetControl(this.timeBlockId);
+    this.updateTimeBlocks();
   }
 
   onDatePickerClosed(): void {
     if (this.date?.invalid) return;
 
-    this.resetControls(2);
-    //get time blocks
+    this.resetControl(this.timeBlockId);
+    this.getTimeBlocks();
   }
 
-  private resetControls(beginWith: number): void {
-    for (let i = beginWith; i < this.controls.length; i++) {
-      this.controls[i]?.setValue(null);
-      this.controls[i]?.markAsUntouched();
-    }
+  private resetControl(control: AbstractControl | null): void {
+    control?.setValue(null);
+    control?.markAsUntouched();
+  }
+
+  private getTimeBlocks(): void {
+    let requestDto = {
+      ...new AvailableTimeBlocksRequestDto(0, 0, new Date()),
+      ...this.reservationForm.value,
+    } as AvailableTimeBlocksRequestDto;
+
+    this.reservationsService
+      .getAvailableTimeBlocks(requestDto)
+      .subscribe((result) => (this.timeBlocks = result));
+  }
+
+  private updateTimeBlocks() {
+    if (this.date?.invalid) return;
+
+    this.getTimeBlocks();
   }
 }
 
@@ -105,8 +117,4 @@ interface ReservationRequest {
   employee: number | null;
   date: Date | null;
   timeBlockId: number | null;
-}
-interface TimeBlockOption {
-  id: number;
-  startTime: string;
 }

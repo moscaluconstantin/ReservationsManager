@@ -17,19 +17,19 @@
   <mat-form-field appearance="fill" *ngIf="actionId && actionId.valid">
     <mat-label>Select an employee</mat-label>
     <mat-select
-      formControlName="employee"
+      formControlName="employeeId"
       (selectionChange)="onEmployeeChanged()"
     >
       <mat-option *ngFor="let employee of employees" [value]="employee.id">{{
         employee.name
       }}</mat-option>
     </mat-select>
-    <mat-error *ngIf="employee && employee.hasError('required')">
+    <mat-error *ngIf="employeeId && employeeId.hasError('required')">
       You must select an employee
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field appearance="fill" *ngIf="employee && employee.valid">
+  <mat-form-field appearance="fill" *ngIf="employeeId && employeeId.valid">
     <input
       matInput
       formControlName="date"
@@ -39,12 +39,15 @@
     />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker (closed)="onDatePickerClosed()"></mat-datepicker>
-    <mat-error *ngIf="employee && employee.hasError('required')">
+    <mat-error *ngIf="employeeId && employeeId.hasError('required')">
       You must choose a date. Try "mm/dd/yyyy"
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field appearance="fill" *ngIf="date && date.valid">
+  <mat-form-field
+    appearance="fill"
+    *ngIf="employeeId && employeeId.valid && date && date.valid"
+  >
     <mat-label>Chose the time</mat-label>
     <mat-select formControlName="timeBlockId">
       <mat-option *ngFor="let timeBlock of timeBlocks" [value]="timeBlock.id">{{

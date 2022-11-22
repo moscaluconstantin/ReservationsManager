@@ -12,6 +12,9 @@ namespace ReservationsManager.DAL.Repositories
         {
         }
 
+        public async Task<ActionEmployee> GetByIdsAsync(int actionId, int employeeId) =>
+            await _context.ActionEmployees.FirstOrDefaultAsync(x => x.EmployeeID == employeeId && x.ActionID == actionId);
+
         public async Task<IEnumerable<Action>> GetActionsAsync() =>
             await _context.ActionEmployees
             .Include(x => x.Action)

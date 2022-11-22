@@ -7,6 +7,6 @@ namespace ReservationsManager.DAL.Interfaces
     {
         Task<IEnumerable<Action>> GetActionsAsync();
         Task<IEnumerable<ActionEmployee>> GetAllByEmployeeIdAsync(int employeeId);
-        Task<IEnumerable<Employee>> GetEmployeesAsync();
+        Task<IEnumerable<Employee>> GetEmployeesByActionIdAsync(int actionId);
     }
 }

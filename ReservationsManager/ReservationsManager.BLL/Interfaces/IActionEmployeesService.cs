@@ -7,7 +7,7 @@ namespace ReservationsManager.BLL.Interfaces
     public interface IActionEmployeesService
     {
         Task<IEnumerable<AssignedActionDto>> GetActionsAsync();
-        Task<IEnumerable<ActionEmployeeDto>> GetAllByEmployeeIDAsync(int employeeID);
-        Task<IEnumerable<WorkingEmployeeDto>> GetWorkingEmployeesAsync();
+        Task<IEnumerable<ActionEmployeeDto>> GetAllByEmployeeIdAsync(int employeeID);
+        Task<IEnumerable<WorkingEmployeeDto>> GetWorkingEmployeesAsync(int actionId);
     }
 }

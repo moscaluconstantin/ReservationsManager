@@ -17,7 +17,7 @@ namespace ReservationsManager.DAL.Repositories
             .Include(x => x.Action)
             .Select(x => x.Action)
             .Distinct()
-            .OrderBy(x=>x.Name)
+            .OrderBy(x => x.Name)
             .ToListAsync();
 
         public async Task<IEnumerable<ActionEmployee>> GetAllByEmployeeIdAsync(int employeeId) =>
@@ -26,9 +26,10 @@ namespace ReservationsManager.DAL.Repositories
             .Where(x => x.EmployeeID == employeeId)
             .ToListAsync();
 
-        public async Task<IEnumerable<Employee>> GetEmployeesAsync() =>
+        public async Task<IEnumerable<Employee>> GetEmployeesByActionIdAsync(int actionId) =>
             await _context.ActionEmployees
             .Include(x => x.Employee)
+            .Where(x=>x.ActionID==actionId)
             .Select(x => x.Employee)
             .Distinct()
             .ToListAsync();

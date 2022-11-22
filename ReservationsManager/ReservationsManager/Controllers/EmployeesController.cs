@@ -25,10 +25,10 @@ namespace ReservationsManager.API.Controllers
             return Ok(employees);
         }
 
-        [HttpGet("GetWorkingEmployees")]
-        public async Task<IActionResult> GetWorkingEmployees()
+        [HttpGet("AssignedToAction")]
+        public async Task<IActionResult> GetWorkingEmployees(int actionId)
         {
-            var employees = await _actionEmployeesService.GetWorkingEmployeesAsync();
+            var employees = await _actionEmployeesService.GetWorkingEmployeesAsync(actionId);
             return Ok(employees);
         }
     }

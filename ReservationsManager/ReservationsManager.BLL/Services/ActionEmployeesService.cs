@@ -24,15 +24,15 @@ namespace ReservationsManager.BLL.Services
             return _mapper.Map<IEnumerable<AssignedActionDto>>(actions);
         }
 
-        public async Task<IEnumerable<ActionEmployeeDto>> GetAllByEmployeeIDAsync(int employeeID)
+        public async Task<IEnumerable<ActionEmployeeDto>> GetAllByEmployeeIdAsync(int employeeID)
         {
             var actionEmployees = await _repository.GetAllByEmployeeIdAsync(employeeID);
             return _mapper.Map<IEnumerable<ActionEmployeeDto>>(actionEmployees);
         }
 
-        public async Task<IEnumerable<WorkingEmployeeDto>> GetWorkingEmployeesAsync()
+        public async Task<IEnumerable<WorkingEmployeeDto>> GetWorkingEmployeesAsync(int actionId)
         {
-            var employees = await _repository.GetEmployeesAsync();
+            var employees = await _repository.GetEmployeesByActionIdAsync(actionId);
             return _mapper.Map<IEnumerable<WorkingEmployeeDto>>(employees);
         }
     }

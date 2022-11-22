@@ -17,7 +17,7 @@ namespace ReservationsManager.API.Controllers
         [HttpGet("EmployeeActions")]
         public async Task<IActionResult> GetAllByEmployeeId(int employeeId)
         {
-            var actions = await _actionEmployeesService.GetAllByEmployeeIDAsync(employeeId);
+            var actions = await _actionEmployeesService.GetAllByEmployeeIdAsync(employeeId);
             return Ok(actions);
         }
     }

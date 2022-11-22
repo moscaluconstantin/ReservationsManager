@@ -1,1 +1,157 @@
-<p>add-user-reservation works!</p>
+<form [formGroup]="reservationForm" (submit)="addReservation()">
+  <mat-form-field appearance="fill">
+    <mat-label>Chose a procedure</mat-label>
+    <mat-select
+      formControlName="actionId"
+      (selectionChange)="onActionChanged()"
+    >
+      <mat-option *ngFor="let action of actions" [value]="action.id">{{
+        action.name
+      }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="actionId && actionId.hasError('required')">
+      You must choose a procedure
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" *ngIf="actionId && actionId.valid">
+    <mat-label>Select an employee</mat-label>
+    <mat-select
+      formControlName="employee"
+      (selectionChange)="onEmployeeChanged()"
+    >
+      <mat-option *ngFor="let employee of employees" [value]="employee.id">{{
+        employee.name
+      }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="employee && employee.hasError('required')">
+      You must select an employee
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" *ngIf="employee && employee.valid">
+    <input
+      matInput
+      formControlName="date"
+      [min]="minDate"
+      [matDatepicker]="picker"
+      placeholder="Choose a date"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker (closed)="onDatePickerClosed()"></mat-datepicker>
+    <mat-error *ngIf="employee && employee.hasError('required')">
+      You must choose a date. Try "mm/dd/yyyy"
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" *ngIf="date && date.valid">
+    <mat-label>Chose the time</mat-label>
+    <mat-select formControlName="timeBlockId">
+      <mat-option *ngFor="let timeBlock of timeBlocks" [value]="timeBlock.id">{{
+        timeBlock.startTime
+      }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="timeBlockId && timeBlockId.hasError('required')">
+      You must choose the time
+    </mat-error>
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="primary"
+    class="submit-button"
+    *ngIf="timeBlockId && timeBlockId.valid"
+  >
+    Add reservation
+  </button>
+</form>
+<!-- <form [formGroup]="reservationForm" (submit)="addReservation()">
+  <div class="input-line">
+    <mat-form-field appearance="fill">
+      <mat-label>Select an employee</mat-label>
+      <mat-select
+        formControlName="employee"
+        [(value)]="selectedEmployee"
+        (selectionChange)="onEmployeeChanged()"
+      >
+        <mat-option *ngFor="let employee of employees" [value]="employee.id">{{
+          employee.name
+        }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="employee && employee.hasError('required')">
+        You must select an employee
+      </mat-error>
+    </mat-form-field>
+    <button type="button" mat-raised-button (click)="selectedEmployee = null">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+
+  <div class="input-line">
+    <mat-form-field appearance="fill">
+      <input
+        matInput
+        formControlName="date"
+        [min]="minDate"
+        [matDatepicker]="picker"
+        placeholder="Choose a date"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker (closed)="onDatePickerClosed()"></mat-datepicker>
+      <mat-error *ngIf="employee && employee.hasError('required')">
+        You must choose a date. Try "mm/dd/yyyy"
+      </mat-error>
+    </mat-form-field>
+    <button type="button" mat-raised-button (click)="resetDate()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+
+  <div class="input-line" *ngIf="date && date.valid">
+    <mat-form-field appearance="fill">
+      <mat-label>Chose the time</mat-label>
+      <mat-select
+        formControlName="timeBlockId"
+        [(value)]="selectedTime"
+        (selectionChange)="onTimeChanged()"
+      >
+        <mat-option
+          *ngFor="let timeBlock of timeBlocks"
+          [value]="timeBlock.id"
+          >{{ timeBlock.startTime }}</mat-option
+        >
+      </mat-select>
+      <mat-error *ngIf="timeBlockId && timeBlockId.hasError('required')">
+        You must choose the time
+      </mat-error>
+    </mat-form-field>
+    <button type="button" mat-raised-button (click)="selectedTime = null">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+
+  <div class="input-line">
+    <mat-form-field appearance="fill">
+      <mat-label>Chose a procedure</mat-label>
+      <mat-select
+        formControlName="actionId"
+        [(value)]="selectedAction"
+        (selectionChange)="onActionChanged()"
+      >
+        <mat-option *ngFor="let action of actions" [value]="action.id">{{
+          action.name
+        }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="actionId && actionId.hasError('required')">
+        You must choose a procedure
+      </mat-error>
+    </mat-form-field>
+    <button type="button" mat-raised-button (click)="selectedAction = null">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+
+  <button mat-raised-button color="primary" class="submit-button">
+    Add reservation
+  </button>
+</form> -->

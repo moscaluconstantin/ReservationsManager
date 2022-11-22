@@ -1,0 +1,28 @@
+form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+  margin: 60px auto;
+}
+
+.submit-button {
+  width: 30%;
+  margin-left: 35%;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 13px;
+}
+
+/* .input-line {
+  width: 100%;
+  margin-bottom: 13px;
+  display: inline-flex;
+  justify-content: space-between;
+}
+
+.input-line button {
+  height: 59px;
+  margin-left: 5%;
+} */

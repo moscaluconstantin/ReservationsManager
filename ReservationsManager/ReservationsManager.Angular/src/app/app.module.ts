@@ -12,18 +12,20 @@ import { UserModule } from './modules/user/user.module';
 import { AuthGuard } from './_guards/auth.guard';
 import { AuthInterceptor } from './_interceptors/auth.interceptor';
 
+const modules = [
+  BrowserModule,
+  HttpClientModule,
+  AppRoutingModule,
+  BrowserAnimationsModule,
+  LoginModule,
+  RegisterUserModule,
+  RegisterEmployeeModule,
+  UserModule,
+];
+
 @NgModule({
   declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    LoginModule,
-    RegisterUserModule,
-    RegisterEmployeeModule,
-    UserModule,
-  ],
+  imports: [modules],
   providers: [
     AuthGuard,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

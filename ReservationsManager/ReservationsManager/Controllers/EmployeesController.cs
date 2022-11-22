@@ -6,7 +6,7 @@ namespace ReservationsManager.API.Controllers
 {
     [Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeesService _employeesService;
@@ -25,7 +25,7 @@ namespace ReservationsManager.API.Controllers
             return Ok(employees);
         }
 
-        [HttpGet("AssignedToAction")]
+        [HttpGet("AssignedToAction/{actionId}")]
         public async Task<IActionResult> GetWorkingEmployees(int actionId)
         {
             var employees = await _actionEmployeesService.GetWorkingEmployeesAsync(actionId);

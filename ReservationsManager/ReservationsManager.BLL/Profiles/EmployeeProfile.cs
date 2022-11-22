@@ -10,11 +10,8 @@ namespace ReservationsManager.BLL.Profiles
         public EmployeeProfile()
         {
             CreateMap<EmployeeForRegisterDto, Employee>();
-
-            CreateMap<Employee, EmployeeDto>()
-                .ForMember(x => x.Name, y => y.MapFrom(z => z.UserName));
-
             CreateMap<Employee, EmployeeDto>();
+            CreateMap<Employee, WorkingEmployeeDto>();
         }
     }
 }

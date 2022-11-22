@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { AssignedActionDto } from 'src/app/_models/Action/AssignedActionDto';
+import { WorkingEmployeeDto } from 'src/app/_models/Employee/WorkingEmployeeDto';
 import { ActionsService } from 'src/app/_services/Actions/actions.service';
+import { EmployeeService } from 'src/app/_services/Employee/employee.service';
 
 @Component({
   selector: 'app-add-user-reservation',
@@ -37,12 +39,8 @@ export class AddUserReservationComponent implements OnInit {
   selectedAction: number | null = null;
   minDate: Date = new Date();
 
-  employees: EmployeeOption[] = [
-    { id: 0, name: 'Name 1' },
-    { id: 1, name: 'Name 2' },
-    { id: 2, name: 'Name 3' },
-    { id: 3, name: 'Name 4' },
-  ];
+  actions: Array<AssignedActionDto> = [];
+  employees: Array<WorkingEmployeeDto> = [];
   timeBlocks: TimeBlockOption[] = [
     { id: 0, startTime: '12:30' },
     { id: 1, startTime: '13:00' },
@@ -50,8 +48,9 @@ export class AddUserReservationComponent implements OnInit {
     { id: 3, startTime: '18:00' },
   ];
 
-  actions: Array<AssignedActionDto> = [];
-
+  private get reservationRequest(): ReservationRequest {
+    return this.reservationForm.value as ReservationRequest;
+  }
   private controls: Array<AbstractControl | null> = [
     this.employee,
     this.date,
@@ -60,7 +59,8 @@ export class AddUserReservationComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private actionsService: ActionsService
+    private actionsService: ActionsService,
+    private employeeService: EmployeeService
   ) {}
 
   ngOnInit(): void {
@@ -75,7 +75,10 @@ export class AddUserReservationComponent implements OnInit {
 
   onActionChanged(): void {
     this.resetControls(0);
-    //get employees
+
+    this.employeeService
+      .getEmployeesAssignedToAction(this.reservationRequest.actionId!)
+      .subscribe((result) => (this.employees = result));
   }
 
   onEmployeeChanged(): void {
@@ -97,9 +100,11 @@ export class AddUserReservationComponent implements OnInit {
   }
 }
 
-interface EmployeeOption {
-  id: number;
-  name: string;
+interface ReservationRequest {
+  actionId: number | null;
+  employee: number | null;
+  date: Date | null;
+  timeBlockId: number | null;
 }
 interface TimeBlockOption {
   id: number;

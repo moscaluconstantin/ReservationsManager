@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ReservationsManager.BLL.Interfaces;
 
 namespace ReservationsManager.API.Controllers
 {
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/[controller]")]
     [ApiController]
     public class ActionEmployeesController : ControllerBase
@@ -16,13 +18,6 @@ namespace ReservationsManager.API.Controllers
         public async Task<IActionResult> GetAllByEmployeeId(int employeeId)
         {
             var actions = await _actionEmployeesService.GetAllByEmployeeIDAsync(employeeId);
-            return Ok(actions);
-        }
-
-        [HttpGet("AssignedActions")]
-        public async Task<IActionResult> GetAllAssignedActions()
-        {
-            var actions = await _actionEmployeesService.GetActionsAsync();
             return Ok(actions);
         }
     }

@@ -8,13 +8,11 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class ActionsService {
-  baseUrl = environment.apiUrl + 'ActionEmployees/';
+  baseUrl = environment.apiUrl + 'Actions/';
 
   constructor(private http: HttpClient) {}
 
   getAssignedActions(): Observable<Array<AssignedActionDto>> {
-    return this.http.get<Array<AssignedActionDto>>(
-      `${this.baseUrl}AssignedActions`
-    );
+    return this.http.get<Array<AssignedActionDto>>(`${this.baseUrl}Assigned`);
   }
 }

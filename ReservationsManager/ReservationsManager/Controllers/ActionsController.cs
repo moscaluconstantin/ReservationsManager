@@ -1,18 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ReservationsManager.BLL.Interfaces;
 using ReservationsManager.Common;
 using ReservationsManager.DAL.Interfaces;
 using Action = ReservationsManager.Domain.Models.Action;
 
 namespace ReservationsManager.API.Controllers
 {
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/[controller]")]
     [ApiController]
     public class ActionsController : ControllerBase
     {
         private readonly IActionsRepository _repository;
+        private readonly IActionEmployeesService _actionEmployeesService;
 
-        public ActionsController(IActionsRepository repository) =>
+        public ActionsController(IActionsRepository repository, IActionEmployeesService actionEmployeesService)
+        {
             _repository = repository;
+            _actionEmployeesService = actionEmployeesService;
+        }
+
+        [HttpGet("Assigned")]
+        public async Task<IActionResult> GetAllAssignedActions()
+        {
+            var actions = await _actionEmployeesService.GetActionsAsync();
+            return Ok(actions);
+        }
 
         [HttpGet]
         public async Task<IActionResult> Get()

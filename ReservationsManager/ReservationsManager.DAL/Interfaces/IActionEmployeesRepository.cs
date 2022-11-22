@@ -1,9 +1,12 @@
 ﻿using ReservationsManager.Domain.Models;
+using Action = ReservationsManager.Domain.Models.Action;
 
 namespace ReservationsManager.DAL.Interfaces
 {
     public interface IActionEmployeesRepository: IGenericRepository<ActionEmployee>
     {
-        public Task<IEnumerable<ActionEmployee>> GetAllByEmployeeIdAsync(int employeeId);
+        Task<IEnumerable<Action>> GetActionsAsync();
+        Task<IEnumerable<ActionEmployee>> GetAllByEmployeeIdAsync(int employeeId);
+        Task<IEnumerable<Employee>> GetEmployeesAsync();
     }
 }

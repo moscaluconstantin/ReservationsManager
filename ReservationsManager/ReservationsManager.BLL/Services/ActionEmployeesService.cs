@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ReservationsManager.BLL.Interfaces;
 using ReservationsManager.Common.Dtos.ActionEmployees;
+using ReservationsManager.Common.Dtos.Employees;
 using ReservationsManager.DAL.Interfaces;
 
 namespace ReservationsManager.BLL.Services
@@ -19,8 +20,13 @@ namespace ReservationsManager.BLL.Services
         public async Task<IEnumerable<ActionEmployeeDto>> GetAllByEmployeeIDAsync(int employeeID)
         {
             var actionEmployees = await _repository.GetAllByEmployeeIdAsync(employeeID);
-            var dtos = _mapper.Map<IEnumerable<ActionEmployeeDto>>(actionEmployees);
-            return dtos;
+            return _mapper.Map<IEnumerable<ActionEmployeeDto>>(actionEmployees);
+        }
+
+        public async Task<IEnumerable<WorkingEmployeeDto>> GetWorkingEmployeesAsync()
+        {
+            var employees = await _repository.GetEmployeesAsync();
+            return _mapper.Map<IEnumerable<WorkingEmployeeDto>>(employees);
         }
     }
 }

@@ -33,6 +33,13 @@ namespace ReservationsManager.BLL.Services
             return reservationDtos;
         }
 
+        public async Task<IEnumerable<UserReservationDto>> GetAllByUserIdAsync(int userId)
+        {
+            var reservations = await _reservationsRepository.GetAllByUserIdAsync(userId);
+            var rawReservationDtos = ExtractRawReservationDtos(reservations.ToList());
+            return _mapper.Map<IEnumerable<UserReservationDto>>(rawReservationDtos);
+        }
+
         public async Task<IEnumerable<TimeBlockDto>> GetAvailableTimeBlocksAsync(AvailableTimeBlocksRequestDto requestDto)
         {
             var actionEmployee = await _actionEmployeesRepository.GetByIdAsync(requestDto.ActionEmployeeId);
@@ -75,24 +82,48 @@ namespace ReservationsManager.BLL.Services
 
         private ReservationDto[] ExtractClientReservationDtos(IGrouping<int, Reservation> userGroup)
         {
-            var userReservations = userGroup.ToArray();
-            var ReservationDtos = new List<ReservationDto>();
+            //var userReservations = userGroup.ToArray();
+            //var ReservationDtos = new List<ReservationDto>();
+            //int startIndex = 0;
+
+            //for (int i = 0; i < userReservations.Length; i++)
+            //{
+            //    if (i != startIndex)
+            //        continue;
+
+            //    int endIndex = startIndex + userReservations[startIndex].ActionEmployee.Duration - 1;
+            //    var reservationDto = _mapper.Map<ReservationDto>(userReservations[startIndex]);
+            //    reservationDto.EndTime = userReservations[endIndex].TimeBlock.EndTime;
+            //    ReservationDtos.Add(reservationDto);
+
+            //    startIndex = endIndex + 1;
+            //}
+
+            //return ReservationDtos.ToArray();
+
+            var rawReservations = ExtractRawReservationDtos(userGroup.ToList());
+            return _mapper.Map<ReservationDto[]>(rawReservations);
+        }
+
+        private RawReservationDto[] ExtractRawReservationDtos(List<Reservation> reservations)
+        {
+            var reservationDtos = new List<RawReservationDto>();
             int startIndex = 0;
 
-            for (int i = 0; i < userReservations.Length; i++)
+            for (int i = 0; i < reservations.Count; i++)
             {
                 if (i != startIndex)
                     continue;
 
-                int endIndex = startIndex + userReservations[startIndex].ActionEmployee.Duration - 1;
-                var reservationDto = _mapper.Map<ReservationDto>(userReservations[startIndex]);
-                reservationDto.EndTime = userReservations[endIndex].TimeBlock.EndTime;
-                ReservationDtos.Add(reservationDto);
-                
+                int endIndex = startIndex + reservations[startIndex].ActionEmployee.Duration - 1;
+                var reservationDto = _mapper.Map<RawReservationDto>(reservations[startIndex]);
+                reservationDto.EndTimeBlock = reservations[endIndex].TimeBlock;
+                reservationDtos.Add(reservationDto);
+
                 startIndex = endIndex + 1;
             }
 
-            return ReservationDtos.ToArray();
+            return reservationDtos.ToArray();
         }
 
         private Reservation[] CreateReservationsByDto(ReservationToAddDto reservationToAddDto, IEnumerable<TimeBlock> timeBlocks, int duration)

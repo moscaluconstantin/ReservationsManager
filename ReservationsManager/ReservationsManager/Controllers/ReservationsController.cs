@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ReservationsManager.BLL.Interfaces;
+using ReservationsManager.Common;
 using ReservationsManager.Common.Dtos.Reservations;
-using ReservationsManager.Domain;
 
 namespace ReservationsManager.API.Controllers
 {
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/[controller]")]
     [ApiController]
     public class ReservationsController : ControllerBase
@@ -14,7 +16,7 @@ namespace ReservationsManager.API.Controllers
         public ReservationsController(IReservationsService reservationsService) =>
             _reservationsService = reservationsService;
 
-        [HttpGet]
+        [HttpGet("All")]
         public async Task<IEnumerable<ReservationDto>> GetAll() =>
             await _reservationsService.GetAllAsync();
 
@@ -23,6 +25,14 @@ namespace ReservationsManager.API.Controllers
         {
             var availableTimeBlocks = await _reservationsService.GetAvailableTimeBlocksAsync(requestDto);
             return Ok(availableTimeBlocks);
+        }
+
+        [Authorize(Roles = UserRoles.User)]
+        [HttpGet("ForUser/{userId}")]
+        public async Task<IActionResult> GetUserReservations(int userId)
+        {
+            var reservations = await _reservationsService.GetAllByUserIdAsync(userId);
+            return Ok(reservations);
         }
 
         [HttpPost]

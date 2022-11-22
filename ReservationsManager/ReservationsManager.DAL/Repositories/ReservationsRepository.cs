@@ -11,6 +11,14 @@ namespace ReservationsManager.DAL.Repositories
         {
         }
 
+        public async Task<IEnumerable<Reservation>> GetAllByUserIdAsync(int userId)=>
+            await _context.Reservations
+            .Include(x => x.ActionEmployee.Employee)
+            .Include(x => x.ActionEmployee.Action)
+            .Include(x => x.TimeBlock)
+            .OrderBy(x => x.Date)
+            .ToListAsync();
+
         public async Task<IEnumerable<Reservation>> GetAllOrderedByDateAsync() =>
             await _context.Reservations
             .Include(x=>x.User)

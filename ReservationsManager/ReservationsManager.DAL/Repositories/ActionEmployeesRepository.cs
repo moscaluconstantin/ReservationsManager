@@ -17,6 +17,7 @@ namespace ReservationsManager.DAL.Repositories
             .Include(x => x.Action)
             .Select(x => x.Action)
             .Distinct()
+            .OrderBy(x=>x.Name)
             .ToListAsync();
 
         public async Task<IEnumerable<ActionEmployee>> GetAllByEmployeeIdAsync(int employeeId) =>

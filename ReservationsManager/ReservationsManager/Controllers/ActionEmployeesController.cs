@@ -12,10 +12,17 @@ namespace ReservationsManager.API.Controllers
         public ActionEmployeesController(IActionEmployeesService actionEmployeesService) => 
             _actionEmployeesService = actionEmployeesService;
 
-        [HttpGet]
+        [HttpGet("EmployeeActions")]
         public async Task<IActionResult> GetAllByEmployeeId(int employeeId)
         {
             var actions = await _actionEmployeesService.GetAllByEmployeeIDAsync(employeeId);
+            return Ok(actions);
+        }
+
+        [HttpGet("AssignedActions")]
+        public async Task<IActionResult> GetAllAssignedActions()
+        {
+            var actions = await _actionEmployeesService.GetActionsAsync();
             return Ok(actions);
         }
     }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { AssignedActionDto } from 'src/app/_models/Action/AssignedActionDto';
+import { ActionsService } from 'src/app/_services/Actions/actions.service';
 
 @Component({
   selector: 'app-add-user-reservation',
@@ -48,12 +50,7 @@ export class AddUserReservationComponent implements OnInit {
     { id: 3, startTime: '18:00' },
   ];
 
-  actions: ActionOption[] = [
-    { id: 0, name: 'Hair Wash' },
-    { id: 1, name: 'Hair Cut' },
-    { id: 2, name: 'Regular Manicure' },
-    { id: 3, name: 'Hard Gel' },
-  ];
+  actions: Array<AssignedActionDto> = [];
 
   private controls: Array<AbstractControl | null> = [
     this.employee,
@@ -61,10 +58,15 @@ export class AddUserReservationComponent implements OnInit {
     this.timeBlockId,
   ];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private actionsService: ActionsService
+  ) {}
 
   ngOnInit(): void {
-    //get actions
+    this.actionsService
+      .getAssignedActions()
+      .subscribe((result) => (this.actions = result));
   }
 
   addReservation(): void {
@@ -102,8 +104,4 @@ interface EmployeeOption {
 interface TimeBlockOption {
   id: number;
   startTime: string;
-}
-interface ActionOption {
-  id: number;
-  name: string;
 }

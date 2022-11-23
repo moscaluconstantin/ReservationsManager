@@ -30,8 +30,7 @@ export class ReservationsService {
     requestDto: AvailableTimeBlocksRequestDto
   ): Observable<Array<TimeBlockDto>> {
     let requestParams = new HttpParams()
-      .set('ActionId', requestDto.actionId)
-      .set('EmployeeId', requestDto.employeeId)
+      .set('ActionEmployeeId', requestDto.actionEmployeeId)
       .set('Date', requestDto.date.toDateString());
 
     return this.http.get<Array<TimeBlockDto>>(
@@ -48,11 +47,12 @@ export class ReservationsService {
         this.accountService.accountId,
         0,
         0,
-        0,
         new Date()
       ),
       ...request,
     };
+
+    console.log(reservationToAddDto);
 
     return this.http.post<any>(this.baseUrl, reservationToAddDto);
   }

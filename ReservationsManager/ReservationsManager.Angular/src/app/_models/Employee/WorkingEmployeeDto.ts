@@ -1,3 +1,3 @@
 export class WorkingEmployeeDto {
-  constructor(public id: number, public name: string) {}
+  constructor(public actionEmployeeId: number, public employeeName: string) {}
 }

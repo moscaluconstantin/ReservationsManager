@@ -15,14 +15,6 @@ mat-form-field {
   margin-bottom: 13px;
 }
 
-/* .input-line {
-  width: 100%;
-  margin-bottom: 13px;
-  display: inline-flex;
-  justify-content: space-between;
+mat-spinner {
+  margin: auto;
 }
-
-.input-line button {
-  height: 59px;
-  margin-left: 5%;
-} */

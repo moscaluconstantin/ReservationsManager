@@ -2,6 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AvailableTimeBlocksRequestDto } from 'src/app/_models/AvailableTimeBlocksRequestDto';
+import { ReservationRequest } from 'src/app/_models/Reservation/ReservationRequest';
+import { ReservationToAddDto } from 'src/app/_models/Reservation/ReservationToAddDto';
 import { UserReservationDto } from 'src/app/_models/Reservation/UserReservationDto';
 import { TimeBlockDto } from 'src/app/_models/TimeBlockDto';
 import { environment } from 'src/environments/environment';
@@ -38,5 +40,20 @@ export class ReservationsService {
         params: requestParams,
       }
     );
+  }
+
+  addReservation(request: ReservationRequest): Observable<any> {
+    let reservationToAddDto = {
+      ...new ReservationToAddDto(
+        this.accountService.accountId,
+        0,
+        0,
+        0,
+        new Date()
+      ),
+      ...request,
+    };
+
+    return this.http.post<any>(this.baseUrl, reservationToAddDto);
   }
 }

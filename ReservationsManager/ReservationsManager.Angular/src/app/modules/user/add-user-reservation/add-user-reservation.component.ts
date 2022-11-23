@@ -3,6 +3,8 @@ import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { AssignedActionDto } from 'src/app/_models/Action/AssignedActionDto';
 import { AvailableTimeBlocksRequestDto } from 'src/app/_models/AvailableTimeBlocksRequestDto';
 import { WorkingEmployeeDto } from 'src/app/_models/Employee/WorkingEmployeeDto';
+import { ReservationRequest } from 'src/app/_models/Reservation/ReservationRequest';
+import { ReservationToAddDto } from 'src/app/_models/Reservation/ReservationToAddDto';
 import { TimeBlockDto } from 'src/app/_models/TimeBlockDto';
 import { ActionsService } from 'src/app/_services/Actions/actions.service';
 import { EmployeeService } from 'src/app/_services/Employee/employee.service';
@@ -18,7 +20,7 @@ export class AddUserReservationComponent implements OnInit {
     actionId: this.fb.control('', Validators.required),
     employeeId: this.fb.control('', Validators.required),
     date: this.fb.control('', Validators.required),
-    timeBlockId: this.fb.control('', Validators.required),
+    startTimeBlockId: this.fb.control('', Validators.required),
   });
 
   get actionId(): AbstractControl | null {
@@ -34,17 +36,14 @@ export class AddUserReservationComponent implements OnInit {
   }
 
   get timeBlockId(): AbstractControl | null {
-    return this.reservationForm.controls['timeBlockId'];
+    return this.reservationForm.controls['startTimeBlockId'];
   }
-
-  selectedEmployee: number | null = null;
-  selectedTime: number | null = null;
-  selectedAction: number | null = null;
-  minDate: Date = new Date();
 
   actions: Array<AssignedActionDto> = [];
   employees: Array<WorkingEmployeeDto> = [];
   timeBlocks: TimeBlockDto[] = [];
+  minDate: Date = new Date();
+  loading: boolean = false;
 
   private get reservationRequest(): ReservationRequest {
     return this.reservationForm.value as ReservationRequest;
@@ -58,13 +57,23 @@ export class AddUserReservationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.actionsService
-      .getAssignedActions()
-      .subscribe((result) => (this.actions = result));
+    this.getActions();
   }
 
   addReservation(): void {
-    console.log(this.reservationForm.value);
+    if (this.reservationForm.invalid || this.loading) return;
+
+    this.loading = true;
+    this.reservationsService.addReservation(this.reservationRequest).subscribe({
+      next: (result) => {
+        this.loading = false;
+        console.log(`Reservation add status: ${result}`);
+      },
+      error: (err) => {
+        this.loading = false;
+        console.log(`Failed: ${err}`);
+      },
+    });
   }
 
   onActionChanged(): void {
@@ -94,15 +103,31 @@ export class AddUserReservationComponent implements OnInit {
     control?.markAsUntouched();
   }
 
+  private getActions(): void {
+    this.loading = true;
+
+    this.actionsService.getAssignedActions().subscribe({
+      next: (result) => {
+        this.loading = false;
+        this.actions = result;
+      },
+      error: (err) => (this.loading = false),
+    });
+  }
+
   private getTimeBlocks(): void {
     let requestDto = {
       ...new AvailableTimeBlocksRequestDto(0, 0, new Date()),
       ...this.reservationForm.value,
     } as AvailableTimeBlocksRequestDto;
 
-    this.reservationsService
-      .getAvailableTimeBlocks(requestDto)
-      .subscribe((result) => (this.timeBlocks = result));
+    this.reservationsService.getAvailableTimeBlocks(requestDto).subscribe({
+      next: (result) => {
+        this.loading = false;
+        this.timeBlocks = result;
+      },
+      error: (err) => (this.loading = false),
+    });
   }
 
   private updateTimeBlocks() {
@@ -110,11 +135,4 @@ export class AddUserReservationComponent implements OnInit {
 
     this.getTimeBlocks();
   }
-}
-
-interface ReservationRequest {
-  actionId: number | null;
-  employee: number | null;
-  date: Date | null;
-  timeBlockId: number | null;
 }

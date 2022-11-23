@@ -44,7 +44,7 @@ namespace ReservationsManager.BLL.Services
         {
             var actionEmployee = await _actionEmployeesRepository.GetByIdAsync(requestDto.ActionEmployeeId);
             var freeTimeBlocks = await GetFreeTimeBlocks(actionEmployee.EmployeeID, requestDto.Date);
-            var availableTimeBlocks = GetAvailableTimeBlocks(freeTimeBlocks, actionEmployee.Duration);
+            var availableTimeBlocks = GetAvailableTimeBlocks(freeTimeBlocks, requestDto.Date, actionEmployee.Duration);
 
             return _mapper.Map<IEnumerable<TimeBlockDto>>(availableTimeBlocks);
         }
@@ -82,25 +82,6 @@ namespace ReservationsManager.BLL.Services
 
         private ReservationDto[] ExtractClientReservationDtos(IGrouping<int, Reservation> userGroup)
         {
-            //var userReservations = userGroup.ToArray();
-            //var ReservationDtos = new List<ReservationDto>();
-            //int startIndex = 0;
-
-            //for (int i = 0; i < userReservations.Length; i++)
-            //{
-            //    if (i != startIndex)
-            //        continue;
-
-            //    int endIndex = startIndex + userReservations[startIndex].ActionEmployee.Duration - 1;
-            //    var reservationDto = _mapper.Map<ReservationDto>(userReservations[startIndex]);
-            //    reservationDto.EndTime = userReservations[endIndex].TimeBlock.EndTime;
-            //    ReservationDtos.Add(reservationDto);
-
-            //    startIndex = endIndex + 1;
-            //}
-
-            //return ReservationDtos.ToArray();
-
             var rawReservations = ExtractRawReservationDtos(userGroup.ToList());
             return _mapper.Map<ReservationDto[]>(rawReservations);
         }
@@ -146,9 +127,10 @@ namespace ReservationsManager.BLL.Services
             return timeBlocks.Where(x => !reservedTimeBlocks.Contains(x)).OrderBy(x => x.Id).ToList();
         }
 
-        private IEnumerable<TimeBlock> GetAvailableTimeBlocks(List<TimeBlock> freeTimeBlocks, int duration)
+        private IEnumerable<TimeBlock> GetAvailableTimeBlocks(List<TimeBlock> freeTimeBlocks, DateTime date, int duration)
         {
             var availableTimeBlocks = new List<TimeBlock>();
+            bool today = date == DateTime.Now.Date;
 
             if (freeTimeBlocks.Count < duration)
                 return availableTimeBlocks;
@@ -156,6 +138,9 @@ namespace ReservationsManager.BLL.Services
             for (int i = 0; i <= freeTimeBlocks.Count - duration; i++)
             {
                 bool isValid = true;
+
+                if (today && PassedTime(freeTimeBlocks[i].StartTime))
+                    continue;
 
                 for (int j = 0; j < duration - 1; j++)
                 {
@@ -174,5 +159,8 @@ namespace ReservationsManager.BLL.Services
 
             return availableTimeBlocks;
         }
+
+        private bool PassedTime(string time) =>
+            !TimeSpan.TryParse(time, out var testTimeSpan) || testTimeSpan < DateTime.Now.TimeOfDay;
     }
 }

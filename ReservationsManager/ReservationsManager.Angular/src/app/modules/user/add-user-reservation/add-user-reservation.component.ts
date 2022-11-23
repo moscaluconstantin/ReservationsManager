@@ -121,7 +121,13 @@ export class AddUserReservationComponent implements OnInit {
 
     this.reservationsService
       .getAvailableTimeBlocks(requestDto)
-      .subscribe((result) => (this.timeBlocks = result));
+      .subscribe((result) => {
+        this.timeBlocks = result;
+
+        if (this.timeBlocks.length == 0) {
+          this.date?.setErrors({ busyDay: true });
+        }
+      });
   }
 
   private updateTimeBlocks() {

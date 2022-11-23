@@ -38,17 +38,32 @@
       [min]="minDate"
       [matDatepicker]="picker"
       placeholder="Choose a date"
+      [disabled]="true"
     />
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker (closed)="onDatePickerClosed()"></mat-datepicker>
-    <mat-error *ngIf="employeeId && employeeId.hasError('required')">
+    <mat-datepicker-toggle
+      #dateToggler
+      matSuffix
+      [for]="picker"
+    ></mat-datepicker-toggle>
+    <mat-datepicker
+      #picker
+      (closed)="onDatePickerClosed()"
+      [disabled]="false"
+    ></mat-datepicker>
+    <mat-hint>Click the calendar icon to choose a date</mat-hint>
+    <mat-error *ngIf="date && date.hasError('required')">
       You must choose a date. Try "mm/dd/yyyy"
+    </mat-error>
+    <mat-error *ngIf="date && date.hasError('busyDay')">
+      This day is busy, try another day or employee
     </mat-error>
   </mat-form-field>
 
   <mat-form-field
     appearance="fill"
-    *ngIf="employeeId && employeeId.valid && date && date.valid"
+    *ngIf="
+      employeeId && employeeId.valid && date && date.valid && timeBlocks.length
+    "
   >
     <mat-label>Chose the time</mat-label>
     <mat-select formControlName="timeBlockId">

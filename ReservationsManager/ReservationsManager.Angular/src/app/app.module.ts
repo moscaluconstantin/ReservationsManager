@@ -10,8 +10,9 @@ import { RegisterUserModule } from './modules/register/register-user/register-us
 import { RegisterEmployeeModule } from './modules/register/register-employee/register-employee.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthGuard } from './_guards/auth.guard';
-import { AuthInterceptor } from './_interceptors/auth.interceptor';
+import { AuthInterceptor } from './_interceptors/auth/auth.interceptor';
 import { DatePipe } from '@angular/common';
+import { LoadingInterceptor } from './_interceptors/loading/loading.interceptor';
 
 const modules = [
   BrowserModule,
@@ -30,6 +31,7 @@ const modules = [
   providers: [
     AuthGuard,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
     DatePipe,
   ],
   bootstrap: [AppComponent],

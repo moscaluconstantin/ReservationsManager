@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserComponent } from './user/user.component';
 import { UserReservationsListComponent } from './user-reservations-list/user-reservations-list.component';
 import { AddUserReservationComponent } from './add-user-reservation/add-user-reservation.component';
+import { LoadingSpinnerModule } from '../loading-spinner/loading-spinner.module';
 
 const components = [
   UserComponent,
@@ -21,6 +22,7 @@ const components = [
     UserRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
+    LoadingSpinnerModule,
   ],
   exports: [components],
 })

@@ -9,6 +9,7 @@ import { ActionsService } from 'src/app/_services/Actions/actions.service';
 import { EmployeeService } from 'src/app/_services/Employee/employee.service';
 import { ReservationsService } from 'src/app/_services/Reservations/reservations.service';
 import { DatePipe } from '@angular/common';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-add-user-reservation',
@@ -47,7 +48,8 @@ export class AddUserReservationComponent implements OnInit {
   employees: Array<WorkingEmployeeDto> = [];
   timeBlocks: TimeBlockDto[] = [];
   minDate: Date = new Date();
-  loading: boolean = false;
+
+  private sending: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -62,9 +64,9 @@ export class AddUserReservationComponent implements OnInit {
   }
 
   addReservation(): void {
-    if (this.reservationForm.invalid || this.loading) return;
+    if (this.reservationForm.invalid || this.sending) return;
 
-    this.loading = true;
+    this.sending = true;
 
     let reservationRequest = new ReservationRequest(
       this.employeeId?.value,
@@ -72,16 +74,10 @@ export class AddUserReservationComponent implements OnInit {
       this.timeBlockId?.value
     );
 
-    this.reservationsService.addReservation(reservationRequest).subscribe({
-      next: (result) => {
-        this.loading = false;
-        console.log(`Reservation add status: ${result}`);
-      },
-      error: (err) => {
-        this.loading = false;
-        console.log(`Failed: ${err}`);
-      },
-    });
+    this.reservationsService
+      .addReservation(reservationRequest)
+      .pipe(finalize(() => (this.sending = false)))
+      .subscribe();
   }
 
   onActionChanged(): void {
@@ -112,15 +108,9 @@ export class AddUserReservationComponent implements OnInit {
   }
 
   private getActions(): void {
-    this.loading = true;
-
-    this.actionsService.getAssignedActions().subscribe({
-      next: (result) => {
-        this.loading = false;
-        this.actions = result;
-      },
-      error: (err) => (this.loading = false),
-    });
+    this.actionsService
+      .getAssignedActions()
+      .subscribe((result) => (this.actions = result));
   }
 
   private getTimeBlocks(): void {
@@ -129,13 +119,9 @@ export class AddUserReservationComponent implements OnInit {
       this.selectedDate
     );
 
-    this.reservationsService.getAvailableTimeBlocks(requestDto).subscribe({
-      next: (result) => {
-        this.loading = false;
-        this.timeBlocks = result;
-      },
-      error: (err) => (this.loading = false),
-    });
+    this.reservationsService
+      .getAvailableTimeBlocks(requestDto)
+      .subscribe((result) => (this.timeBlocks = result));
   }
 
   private updateTimeBlocks() {

@@ -1,7 +1,9 @@
+import { ReservationToAddDto } from './ReservationToAddDto';
+
 export class ReservationRequest {
   constructor(
     public actionEmployeeId: number,
-    public date: Date,
+    public date: string,
     public timeBlockId: number
   ) {}
 }

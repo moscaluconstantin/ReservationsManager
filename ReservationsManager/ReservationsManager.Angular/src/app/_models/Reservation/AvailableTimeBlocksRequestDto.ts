@@ -1,3 +1,3 @@
 export class AvailableTimeBlocksRequestDto {
-  constructor(public actionEmployeeId: number, public date: Date) {}
+  constructor(public actionEmployeeId: number, public date: string) {}
 }

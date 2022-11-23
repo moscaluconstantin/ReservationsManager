@@ -8,6 +8,7 @@ import { TimeBlockDto } from 'src/app/_models/TimeBlock/TimeBlockDto';
 import { ActionsService } from 'src/app/_services/Actions/actions.service';
 import { EmployeeService } from 'src/app/_services/Employee/employee.service';
 import { ReservationsService } from 'src/app/_services/Reservations/reservations.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-add-user-reservation',
@@ -38,6 +39,10 @@ export class AddUserReservationComponent implements OnInit {
     return this.reservationForm.controls['timeBlockId'];
   }
 
+  get selectedDate(): string {
+    return this.datePipe.transform(this.date?.value, 'yyyy-MM-dd')!;
+  }
+
   actions: Array<AssignedActionDto> = [];
   employees: Array<WorkingEmployeeDto> = [];
   timeBlocks: TimeBlockDto[] = [];
@@ -48,7 +53,8 @@ export class AddUserReservationComponent implements OnInit {
     private fb: FormBuilder,
     private actionsService: ActionsService,
     private employeeService: EmployeeService,
-    private reservationsService: ReservationsService
+    private reservationsService: ReservationsService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit(): void {
@@ -62,11 +68,9 @@ export class AddUserReservationComponent implements OnInit {
 
     let reservationRequest = new ReservationRequest(
       this.employeeId?.value,
-      this.date?.value,
+      this.selectedDate,
       this.timeBlockId?.value
     );
-
-    console.log(reservationRequest);
 
     this.reservationsService.addReservation(reservationRequest).subscribe({
       next: (result) => {
@@ -120,10 +124,10 @@ export class AddUserReservationComponent implements OnInit {
   }
 
   private getTimeBlocks(): void {
-    let requestDto = {
-      ...new AvailableTimeBlocksRequestDto(0, new Date()),
-      ...this.reservationForm.value,
-    } as AvailableTimeBlocksRequestDto;
+    let requestDto = new AvailableTimeBlocksRequestDto(
+      this.employeeId?.value,
+      this.selectedDate
+    );
 
     this.reservationsService.getAvailableTimeBlocks(requestDto).subscribe({
       next: (result) => {
@@ -135,7 +139,7 @@ export class AddUserReservationComponent implements OnInit {
   }
 
   private updateTimeBlocks() {
-    if (this.date?.invalid) return;
+    if (!this.date?.valid) return;
 
     this.getTimeBlocks();
   }

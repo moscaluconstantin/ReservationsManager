@@ -11,6 +11,7 @@ import { RegisterEmployeeModule } from './modules/register/register-employee/reg
 import { UserModule } from './modules/user/user.module';
 import { AuthGuard } from './_guards/auth.guard';
 import { AuthInterceptor } from './_interceptors/auth.interceptor';
+import { DatePipe } from '@angular/common';
 
 const modules = [
   BrowserModule,
@@ -29,6 +30,7 @@ const modules = [
   providers: [
     AuthGuard,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    DatePipe,
   ],
   bootstrap: [AppComponent],
 })

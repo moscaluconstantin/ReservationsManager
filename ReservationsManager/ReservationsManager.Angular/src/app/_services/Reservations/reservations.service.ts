@@ -31,7 +31,7 @@ export class ReservationsService {
   ): Observable<Array<TimeBlockDto>> {
     let requestParams = new HttpParams()
       .set('ActionEmployeeId', requestDto.actionEmployeeId)
-      .set('Date', requestDto.date.toDateString());
+      .set('Date', requestDto.date);
 
     return this.http.get<Array<TimeBlockDto>>(
       `${this.baseUrl}AvailableTimeBlocks`,
@@ -42,17 +42,10 @@ export class ReservationsService {
   }
 
   addReservation(request: ReservationRequest): Observable<any> {
-    let reservationToAddDto = {
-      ...new ReservationToAddDto(
-        this.accountService.accountId,
-        0,
-        0,
-        new Date()
-      ),
-      ...request,
-    };
-
-    console.log(reservationToAddDto);
+    let reservationToAddDto = ReservationToAddDto.Create(
+      this.accountService.accountId,
+      request
+    );
 
     return this.http.post<any>(this.baseUrl, reservationToAddDto);
   }

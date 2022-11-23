@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserForGreetDto } from 'src/app/_models/UserForGreetDto';
+import { UserForGreetDto } from 'src/app/_models/User/UserForGreetDto';
 import { environment } from 'src/environments/environment';
 import { AccountService } from '../Account/account.service';
 

@@ -1,11 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AvailableTimeBlocksRequestDto } from 'src/app/_models/AvailableTimeBlocksRequestDto';
+import { AvailableTimeBlocksRequestDto } from 'src/app/_models/Reservation/AvailableTimeBlocksRequestDto';
 import { ReservationRequest } from 'src/app/_models/Reservation/ReservationRequest';
 import { ReservationToAddDto } from 'src/app/_models/Reservation/ReservationToAddDto';
 import { UserReservationDto } from 'src/app/_models/Reservation/UserReservationDto';
-import { TimeBlockDto } from 'src/app/_models/TimeBlockDto';
+import { TimeBlockDto } from 'src/app/_models/TimeBlock/TimeBlockDto';
 import { environment } from 'src/environments/environment';
 import { AccountService } from '../Account/account.service';
 

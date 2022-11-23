@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { AssignedActionDto } from 'src/app/_models/Action/AssignedActionDto';
-import { AvailableTimeBlocksRequestDto } from 'src/app/_models/AvailableTimeBlocksRequestDto';
+import { AvailableTimeBlocksRequestDto } from 'src/app/_models/Reservation/AvailableTimeBlocksRequestDto';
 import { WorkingEmployeeDto } from 'src/app/_models/Employee/WorkingEmployeeDto';
 import { ReservationRequest } from 'src/app/_models/Reservation/ReservationRequest';
 import { ReservationToAddDto } from 'src/app/_models/Reservation/ReservationToAddDto';
-import { TimeBlockDto } from 'src/app/_models/TimeBlockDto';
+import { TimeBlockDto } from 'src/app/_models/TimeBlock/TimeBlockDto';
 import { ActionsService } from 'src/app/_services/Actions/actions.service';
 import { EmployeeService } from 'src/app/_services/Employee/employee.service';
 import { ReservationsService } from 'src/app/_services/Reservations/reservations.service';

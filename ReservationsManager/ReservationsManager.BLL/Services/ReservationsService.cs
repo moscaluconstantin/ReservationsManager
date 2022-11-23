@@ -3,7 +3,6 @@ using ReservationsManager.BLL.Interfaces;
 using ReservationsManager.Common.Dtos.Reservations;
 using ReservationsManager.Common.Dtos.TimeBlocks;
 using ReservationsManager.DAL.Interfaces;
-using ReservationsManager.DAL.Repositories;
 using ReservationsManager.Domain.Models;
 
 namespace ReservationsManager.BLL.Services
@@ -52,8 +51,7 @@ namespace ReservationsManager.BLL.Services
 
         public async Task AddReservation(ReservationToAddDto reservationToAddDto)
         {
-            var actionEmployee = await _actionEmployeesRepository
-                .GetByIdsAsync(reservationToAddDto.ActionId, reservationToAddDto.EmployeeId);
+            var actionEmployee = await _actionEmployeesRepository.GetByIdAsync(reservationToAddDto.ActionEmployeeId);
             var timeBlocks = await _timeBlocksRepository.GetAllAsync();
             int duration = actionEmployee.Duration;
 

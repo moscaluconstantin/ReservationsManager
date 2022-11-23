@@ -10,6 +10,7 @@ import { ReservationsService } from 'src/app/_services/Reservations/reservations
 export class UserReservationsListComponent implements OnInit {
   reservations: Array<UserReservationDto>;
   columnsToDisplay = ['employee', 'action', 'date', 'time'];
+  loading: boolean = false;
 
   constructor(private reservationsService: ReservationsService) {
     this.reservations = new Array<UserReservationDto>();
@@ -20,8 +21,11 @@ export class UserReservationsListComponent implements OnInit {
   }
 
   getUserReservations(): void {
-    this.reservationsService
-      .getUserReservations()
-      .subscribe((reservations) => (this.reservations = reservations));
+    this.loading = true;
+
+    this.reservationsService.getUserReservations().subscribe((reservations) => {
+      this.loading = false;
+      this.reservations = reservations;
+    });
   }
 }

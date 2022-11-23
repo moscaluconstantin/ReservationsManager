@@ -11,7 +11,6 @@ namespace ReservationsManager.BLL.Profiles
         {
             CreateMap<EmployeeForRegisterDto, Employee>();
             CreateMap<Employee, EmployeeDto>();
-            CreateMap<Employee, WorkingEmployeeDto>();
         }
     }
 }

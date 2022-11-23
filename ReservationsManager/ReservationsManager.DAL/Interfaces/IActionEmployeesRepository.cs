@@ -8,6 +8,6 @@ namespace ReservationsManager.DAL.Interfaces
         Task<IEnumerable<Action>> GetActionsAsync();
         Task<IEnumerable<ActionEmployee>> GetAllByEmployeeIdAsync(int employeeId);
         Task<ActionEmployee> GetByIdsAsync(int actionId, int employeeId);
-        Task<IEnumerable<Employee>> GetEmployeesByActionIdAsync(int actionId);
+        Task<IEnumerable<ActionEmployee>> GetAllByActionIdAsync(int actionId);
     }
 }

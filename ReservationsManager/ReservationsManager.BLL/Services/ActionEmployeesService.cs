@@ -32,8 +32,8 @@ namespace ReservationsManager.BLL.Services
 
         public async Task<IEnumerable<WorkingEmployeeDto>> GetWorkingEmployeesAsync(int actionId)
         {
-            var employees = await _repository.GetEmployeesByActionIdAsync(actionId);
-            return _mapper.Map<IEnumerable<WorkingEmployeeDto>>(employees);
+            var actionEmployees = await _repository.GetAllByActionIdAsync(actionId);
+            return _mapper.Map<IEnumerable<WorkingEmployeeDto>>(actionEmployees);
         }
     }
 }

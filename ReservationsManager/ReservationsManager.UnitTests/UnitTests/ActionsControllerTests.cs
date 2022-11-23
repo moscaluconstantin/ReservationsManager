@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ReservationsManager.API.Controllers;
+using ReservationsManager.BLL.Interfaces;
 using ReservationsManager.Common;
 using ReservationsManager.DAL.Interfaces;
 using System.Net;
@@ -11,10 +12,14 @@ namespace ReservationsManager.Tests.UnitTests
     {
         private readonly ActionsController _controller;
         private readonly Mock<IActionsRepository> _repositoryMock;
+        private readonly Mock<IActionEmployeesService> _serviceMock;
 
         public ActionsControllerIntegrationTests()
         {
             _repositoryMock = new Mock<IActionsRepository>();
+            _serviceMock=new Mock<IActionEmployeesService>();
+
+
             List<Action> testActions = new List<Action>()
             {
                 new Action()
@@ -38,7 +43,7 @@ namespace ReservationsManager.Tests.UnitTests
             _repositoryMock.Setup(x => x.GetByIdAsync(It.Is<int>(i => i == 1))).ReturnsAsync(testActions[1]);
             _repositoryMock.Setup(x => x.GetByIdAsync(It.Is<int>(i => i == 21))).ReturnsAsync((Action)null);
 
-            _controller = new ActionsController(_repositoryMock.Object);
+            _controller = new ActionsController(_repositoryMock.Object, _serviceMock.Object);
         }
 
         [Fact]

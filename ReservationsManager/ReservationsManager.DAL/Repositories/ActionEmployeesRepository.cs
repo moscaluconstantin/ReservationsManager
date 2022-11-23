@@ -29,11 +29,10 @@ namespace ReservationsManager.DAL.Repositories
             .Where(x => x.EmployeeID == employeeId)
             .ToListAsync();
 
-        public async Task<IEnumerable<Employee>> GetEmployeesByActionIdAsync(int actionId) =>
+        public async Task<IEnumerable<ActionEmployee>> GetAllByActionIdAsync(int actionId) =>
             await _context.ActionEmployees
             .Include(x => x.Employee)
             .Where(x=>x.ActionID==actionId)
-            .Select(x => x.Employee)
             .Distinct()
             .ToListAsync();
     }

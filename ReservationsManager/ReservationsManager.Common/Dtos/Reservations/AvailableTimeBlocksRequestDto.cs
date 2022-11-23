@@ -2,8 +2,7 @@
 {
     public class AvailableTimeBlocksRequestDto
     {
-        public int ActionId { get; set; }
-        public int EmployeeId { get; set; }
+        public int ActionEmployeeId { get; set; }
         public DateTime Date { get; set; }
     }
 }

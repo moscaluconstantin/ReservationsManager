@@ -42,7 +42,7 @@ namespace ReservationsManager.BLL.Services
 
         public async Task<IEnumerable<TimeBlockDto>> GetAvailableTimeBlocksAsync(AvailableTimeBlocksRequestDto requestDto)
         {
-            var actionEmployee = await _actionEmployeesRepository.GetByIdsAsync(requestDto.ActionId, requestDto.EmployeeId);
+            var actionEmployee = await _actionEmployeesRepository.GetByIdAsync(requestDto.ActionEmployeeId);
             var freeTimeBlocks = await GetFreeTimeBlocks(actionEmployee.EmployeeID, requestDto.Date);
             var availableTimeBlocks = GetAvailableTimeBlocks(freeTimeBlocks, actionEmployee.Duration);
 
@@ -132,7 +132,7 @@ namespace ReservationsManager.BLL.Services
             for (int i = 0; i < reservations.Length; i++)
             {
                 reservations[i] = _mapper.Map<Reservation>(reservationToAddDto);
-                reservations[i].TimeBlock = timeBlocks.FirstOrDefault(x => x.Id == reservationToAddDto.StartTimeBlockId + i);
+                reservations[i].TimeBlock = timeBlocks.FirstOrDefault(x => x.Id == reservationToAddDto.TimeBlockId + i);
             }
 
             return reservations;

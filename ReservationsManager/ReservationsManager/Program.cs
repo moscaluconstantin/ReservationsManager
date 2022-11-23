@@ -1,6 +1,7 @@
 using EFCoreMappingApp;
 using Microsoft.AspNetCore.Identity;
 using ReservationsManager.API.Extentions;
+using ReservationsManager.API.Infrastucture.Extentions;
 using ReservationsManager.BLL;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +37,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseDbTransaction();
 
 app.MapControllers();
 

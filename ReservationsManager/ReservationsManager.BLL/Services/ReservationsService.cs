@@ -81,6 +81,18 @@ namespace ReservationsManager.BLL.Services
             await _reservationsRepository.SaveAsync();
         }
 
+        public async Task UpdateReservation(ReservationCanceledUpdateDto updateDto)
+        {
+            var reservation = await _reservationsRepository.GetByIdAsync(updateDto.Id);
+
+            if (reservation == null)
+                return;
+
+            reservation.Canceled = updateDto.Canceled;
+            _reservationsRepository.Update(reservation);
+            await _reservationsRepository.SaveAsync();
+        }
+
         private IEnumerable<ReservationDto> ExtractReservationDtos(IEnumerable<Reservation> reservations)
         {
             var reservationDtos = new List<ReservationDto>();

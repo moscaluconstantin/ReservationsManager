@@ -10,5 +10,6 @@ namespace ReservationsManager.BLL.Interfaces
         Task AddReservation(ReservationToAddDto reservationToAddDto);
         Task<IEnumerable<UserReservationDto>> GetAllByUserIdAsync(int userId);
         Task<IEnumerable<EmployeeReservationDto>> GetAllByEmployeeIdAsync(int employeeId);
+        Task UpdateReservation(ReservationCanceledUpdateDto updateDto);
     }
 }

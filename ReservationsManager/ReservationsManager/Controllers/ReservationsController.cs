@@ -52,5 +52,17 @@ namespace ReservationsManager.API.Controllers
             await _reservationsService.AddReservation(reservationToAddDto);
             return Ok();
         }
+
+        [HttpPut("UpdateStatus")]
+        public async Task<IActionResult> UpdateCanceledState([FromBody] ReservationCanceledUpdateDto updateDto)
+        {
+            if (updateDto.Id < 0)
+            {
+                return BadRequest("Invalid reservation id");
+            }
+
+            await _reservationsService.UpdateReservation(updateDto);
+            return Ok();
+        }
     }
 }

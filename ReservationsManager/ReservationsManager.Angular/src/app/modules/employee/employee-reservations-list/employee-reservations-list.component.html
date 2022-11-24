@@ -28,9 +28,22 @@
   </ng-container>
 
   <ng-container matColumnDef="canceled">
-    <th mat-header-cell *matHeaderCellDef>Canceled</th>
+    <th mat-header-cell *matHeaderCellDef>Status</th>
     <td mat-cell *matCellDef="let reservation">
-      {{ reservation.canceled }}
+      {{ reservation.canceled ? "Canceled" : "Active" }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="button">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let reservation">
+      <button mat-icon-button (click)="update(reservation)">
+        <mat-icon
+          >{{
+            reservation.canceled ? "add" : "remove"
+          }}_circle_outline</mat-icon
+        >
+      </button>
     </td>
   </ng-container>
 

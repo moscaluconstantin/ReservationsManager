@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeReservationDto } from 'src/app/_models/Reservation/EmployeeReservationDto';
+import { ReservationCanceledUpdateDto } from 'src/app/_models/Reservation/ReservationCanceledUpdateDto';
 import { ReservationsService } from 'src/app/_services/Reservations/reservations.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { ReservationsService } from 'src/app/_services/Reservations/reservations
 })
 export class EmployeeReservationsListComponent implements OnInit {
   reservations: Array<EmployeeReservationDto>;
-  columnsToDisplay = ['user', 'action', 'date', 'time', 'canceled'];
+  columnsToDisplay = ['user', 'action', 'date', 'time', 'canceled', 'button'];
 
   constructor(private reservationsService: ReservationsService) {
     this.reservations = new Array<EmployeeReservationDto>();
@@ -23,5 +24,15 @@ export class EmployeeReservationsListComponent implements OnInit {
     this.reservationsService
       .getEmployeeReservations()
       .subscribe((reservations) => (this.reservations = reservations));
+  }
+
+  update(reservation: EmployeeReservationDto): void {
+    reservation.canceled = !reservation.canceled;
+    let updateDto = new ReservationCanceledUpdateDto(
+      reservation.id,
+      reservation.canceled
+    );
+
+    this.reservationsService.updateCanceledState(updateDto).subscribe();
   }
 }

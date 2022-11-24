@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AvailableTimeBlocksRequestDto } from 'src/app/_models/Reservation/AvailableTimeBlocksRequestDto';
 import { EmployeeReservationDto } from 'src/app/_models/Reservation/EmployeeReservationDto';
+import { ReservationCanceledUpdateDto } from 'src/app/_models/Reservation/ReservationCanceledUpdateDto';
 import { ReservationRequest } from 'src/app/_models/Reservation/ReservationRequest';
 import { ReservationToAddDto } from 'src/app/_models/Reservation/ReservationToAddDto';
 import { UserReservationDto } from 'src/app/_models/Reservation/UserReservationDto';
@@ -55,5 +56,11 @@ export class ReservationsService {
     );
 
     return this.http.post<any>(this.baseUrl, reservationToAddDto);
+  }
+
+  updateCanceledState(
+    updateDto: ReservationCanceledUpdateDto
+  ): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}UpdateStatus`, updateDto);
   }
 }

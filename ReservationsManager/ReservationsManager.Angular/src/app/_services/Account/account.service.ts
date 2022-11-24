@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { EmployeeForRegisterDto } from 'src/app/_models/Account/EmployeeForRegisterDto';
 import { UserForRegisterDto } from 'src/app/_models/Account/UserForRegisterDto';
@@ -14,7 +15,7 @@ export class AccountService {
   baseUrl = environment.apiUrl + 'authenticate/';
   registerUrl = this.baseUrl + 'register/';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   get accountId(): number {
     let id = localStorage.getItem('accountId');
@@ -40,6 +41,7 @@ export class AccountService {
 
   logout(): void {
     localStorage.removeItem('accessToken');
+    this.router.navigate(['login']);
   }
 
   registerUser(userForRegister: UserForRegisterDto): Observable<boolean> {

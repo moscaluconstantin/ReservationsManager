@@ -25,6 +25,12 @@ namespace ReservationsManager.BLL.Profiles
                 .ForMember(x => x.EmployeeName, y => y.MapFrom(z => z.Employee.Name))
                 .ForMember(x => x.ActionName, y => y.MapFrom(z => z.Action.Name))
                 .ForMember(x => x.StartTime, y => y.MapFrom(z => z.StartTimeBlock.StartTime));
+
+            CreateMap<RawReservationDto, EmployeeReservationDto>()
+                .ForMember(x => x.UserName, y => y.MapFrom(z => z.User.Name))
+                .ForMember(x => x.ActionName, y => y.MapFrom(z => z.Action.Name))
+                .ForMember(x => x.StartTime, y => y.MapFrom(z => z.StartTimeBlock.StartTime))
+                .ForMember(x => x.Canceled, y => y.MapFrom(z => false));
         }
     }
 }

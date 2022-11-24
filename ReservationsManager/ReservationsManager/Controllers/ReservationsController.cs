@@ -16,15 +16,25 @@ namespace ReservationsManager.API.Controllers
         public ReservationsController(IReservationsService reservationsService) =>
             _reservationsService = reservationsService;
 
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpGet("All")]
         public async Task<IEnumerable<ReservationDto>> GetAll() =>
             await _reservationsService.GetAllAsync();
 
+        [Authorize(Roles = UserRoles.User)]
         [HttpGet("AvailableTimeBlocks")]
         public async Task<IActionResult> GetAvailableTimeBlocks([FromQuery] AvailableTimeBlocksRequestDto requestDto)
         {
             var availableTimeBlocks = await _reservationsService.GetAvailableTimeBlocksAsync(requestDto);
             return Ok(availableTimeBlocks);
+        }
+
+        [Authorize(Roles = UserRoles.Employee)]
+        [HttpGet("ForEmployee/{employeeId}")]
+        public async Task<IActionResult> GetEmployeeReservations(int employeeId)
+        {
+            var reservations = await _reservationsService.GetAllByEmployeeIdAsync(employeeId);
+            return Ok(reservations);
         }
 
         [Authorize(Roles = UserRoles.User)]
@@ -35,6 +45,7 @@ namespace ReservationsManager.API.Controllers
             return Ok(reservations);
         }
 
+        [Authorize(Roles = UserRoles.User)]
         [HttpPost]
         public async Task<IActionResult> AddReservation([FromBody] ReservationToAddDto reservationToAddDto)
         {

@@ -33,6 +33,26 @@ namespace ReservationsManager.BLL.Services
             return reservationDtos;
         }
 
+        public async Task<IEnumerable<EmployeeReservationDto>> GetAllByEmployeeIdAsync(int employeeId)
+        {
+            var reservations = await _reservationsRepository.GetAllByEmployeeIdAsync(employeeId);
+            var groupedByDateReservations = reservations.OrderBy(x => x.TimeBlockID).GroupBy(x => x.Date.Date);
+            var rawReservations = new List<RawReservationDto>();
+
+            foreach (var dateGroup in groupedByDateReservations)
+            {
+                var groupedByUserReservations = dateGroup.GroupBy(x => x.UserID);
+
+                foreach (var userGroup in groupedByUserReservations)
+                {
+                    var rawUserReservations = ExtractRawReservationDtos(userGroup.ToList());
+                    rawReservations.AddRange(rawUserReservations);
+                }
+            }
+
+            return _mapper.Map<IEnumerable<EmployeeReservationDto>>(rawReservations.OrderBy(x => x.Date));
+        }
+
         public async Task<IEnumerable<UserReservationDto>> GetAllByUserIdAsync(int userId)
         {
             var reservations = await _reservationsRepository.GetAllByUserIdAsync(userId);

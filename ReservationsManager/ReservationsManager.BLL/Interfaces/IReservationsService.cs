@@ -9,5 +9,6 @@ namespace ReservationsManager.BLL.Interfaces
         Task<IEnumerable<TimeBlockDto>> GetAvailableTimeBlocksAsync(AvailableTimeBlocksRequestDto requestDto);
         Task AddReservation(ReservationToAddDto reservationToAddDto);
         Task<IEnumerable<UserReservationDto>> GetAllByUserIdAsync(int userId);
+        Task<IEnumerable<EmployeeReservationDto>> GetAllByEmployeeIdAsync(int employeeId);
     }
 }

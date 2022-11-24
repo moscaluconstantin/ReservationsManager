@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AvailableTimeBlocksRequestDto } from 'src/app/_models/Reservation/AvailableTimeBlocksRequestDto';
+import { EmployeeReservationDto } from 'src/app/_models/Reservation/EmployeeReservationDto';
 import { ReservationRequest } from 'src/app/_models/Reservation/ReservationRequest';
 import { ReservationToAddDto } from 'src/app/_models/Reservation/ReservationToAddDto';
 import { UserReservationDto } from 'src/app/_models/Reservation/UserReservationDto';
@@ -23,6 +24,12 @@ export class ReservationsService {
   getUserReservations(): Observable<Array<UserReservationDto>> {
     return this.http.get<Array<UserReservationDto>>(
       `${this.baseUrl}ForUser/${this.accountService.accountId}`
+    );
+  }
+
+  getEmployeeReservations(): Observable<Array<EmployeeReservationDto>> {
+    return this.http.get<Array<EmployeeReservationDto>>(
+      `${this.baseUrl}ForEmployee/${this.accountService.accountId}`
     );
   }
 

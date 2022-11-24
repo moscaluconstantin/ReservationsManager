@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -9,18 +8,135 @@ namespace ReservationsManager.DAL.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            //migrationBuilder.CreateTable(
-            //    name: "Actions",
-            //    columns: table => new
-            //    {
-            //        Id = table.Column<int>(type: "int", nullable: false)
-            //            .Annotation("SqlServer:Identity", "1, 1"),
-            //        Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_Actions", x => x.Id);
-            //    });
+            migrationBuilder.CreateTable(
+                name: "Actions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Actions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+
+                name: "TimeBlocks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StartTime = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    EndTime = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TimeBlocks", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserCredentials",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Login = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserCredentials", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ActionEmployees",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeID = table.Column<int>(type: "int", nullable: false),
+                    ActionID = table.Column<int>(type: "int", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActionEmployees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ActionEmployees_Actions_ActionID",
+                        column: x => x.ActionID,
+                        principalTable: "Actions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ActionEmployees_Employees_EmployeeID",
+                        column: x => x.EmployeeID,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reservations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    ActionEmployeeID = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeBlockID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reservations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reservations_ActionEmployees_ActionEmployeeID",
+                        column: x => x.ActionEmployeeID,
+                        principalTable: "ActionEmployees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reservations_TimeBlocks_TimeBlockID",
+                        column: x => x.TimeBlockID,
+                        principalTable: "TimeBlocks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reservations_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
@@ -60,61 +176,6 @@ namespace ReservationsManager.DAL.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
-
-            //migrationBuilder.CreateTable(
-            //    name: "Employees",
-            //    columns: table => new
-            //    {
-            //        Id = table.Column<int>(type: "int", nullable: false)
-            //            .Annotation("SqlServer:Identity", "1, 1"),
-            //        UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_Employees", x => x.Id);
-            //    });
-
-            //migrationBuilder.CreateTable(
-            //    name: "TimeBlocks",
-            //    columns: table => new
-            //    {
-            //        Id = table.Column<int>(type: "int", nullable: false)
-            //            .Annotation("SqlServer:Identity", "1, 1"),
-            //        StartTime = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-            //        EndTime = table.Column<string>(type: "nvarchar(max)", nullable: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_TimeBlocks", x => x.Id);
-            //    });
-
-            //migrationBuilder.CreateTable(
-            //    name: "UserCredentials",
-            //    columns: table => new
-            //    {
-            //        Id = table.Column<int>(type: "int", nullable: false)
-            //            .Annotation("SqlServer:Identity", "1, 1"),
-            //        Login = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-            //        Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_UserCredentials", x => x.Id);
-            //    });
-
-            //migrationBuilder.CreateTable(
-            //    name: "Users",
-            //    columns: table => new
-            //    {
-            //        Id = table.Column<int>(type: "int", nullable: false)
-            //            .Annotation("SqlServer:Identity", "1, 1"),
-            //        UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-            //        Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_Users", x => x.Id);
-            //    });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
@@ -222,76 +283,15 @@ namespace ReservationsManager.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            //migrationBuilder.CreateTable(
-            //    name: "ActionEmployees",
-            //    columns: table => new
-            //    {
-            //        Id = table.Column<int>(type: "int", nullable: false)
-            //            .Annotation("SqlServer:Identity", "1, 1"),
-            //        EmployeeID = table.Column<int>(type: "int", nullable: false),
-            //        ActionID = table.Column<int>(type: "int", nullable: false),
-            //        Duration = table.Column<int>(type: "int", nullable: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_ActionEmployees", x => x.Id);
-            //        table.ForeignKey(
-            //            name: "FK_ActionEmployees_Actions_ActionID",
-            //            column: x => x.ActionID,
-            //            principalTable: "Actions",
-            //            principalColumn: "Id",
-            //            onDelete: ReferentialAction.Cascade);
-            //        table.ForeignKey(
-            //            name: "FK_ActionEmployees_Employees_EmployeeID",
-            //            column: x => x.EmployeeID,
-            //            principalTable: "Employees",
-            //            principalColumn: "Id",
-            //            onDelete: ReferentialAction.Cascade);
-            //    });
+            migrationBuilder.CreateIndex(
+                name: "IX_ActionEmployees_ActionID",
+                table: "ActionEmployees",
+                column: "ActionID");
 
-            //migrationBuilder.CreateTable(
-            //    name: "Reservations",
-            //    columns: table => new
-            //    {
-            //        Id = table.Column<int>(type: "int", nullable: false)
-            //            .Annotation("SqlServer:Identity", "1, 1"),
-            //        UserID = table.Column<int>(type: "int", nullable: false),
-            //        ActionEmployeeID = table.Column<int>(type: "int", nullable: false),
-            //        Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-            //        TimeBlockID = table.Column<int>(type: "int", nullable: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_Reservations", x => x.Id);
-            //        table.ForeignKey(
-            //            name: "FK_Reservations_ActionEmployees_ActionEmployeeID",
-            //            column: x => x.ActionEmployeeID,
-            //            principalTable: "ActionEmployees",
-            //            principalColumn: "Id",
-            //            onDelete: ReferentialAction.Cascade);
-            //        table.ForeignKey(
-            //            name: "FK_Reservations_TimeBlocks_TimeBlockID",
-            //            column: x => x.TimeBlockID,
-            //            principalTable: "TimeBlocks",
-            //            principalColumn: "Id",
-            //            onDelete: ReferentialAction.Cascade);
-            //        table.ForeignKey(
-            //            name: "FK_Reservations_Users_UserID",
-            //            column: x => x.UserID,
-            //            principalTable: "Users",
-            //            principalColumn: "Id",
-            //            onDelete: ReferentialAction.Cascade);
-            //    });
-
-            //migrationBuilder.CreateIndex(
-            //    name: "IX_ActionEmployees_ActionID",
-            //    table: "ActionEmployees",
-            //    column: "ActionID");
-
-            //migrationBuilder.CreateIndex(
-            //    name: "IX_ActionEmployees_EmployeeID",
-            //    table: "ActionEmployees",
-            //    column: "EmployeeID");
+            migrationBuilder.CreateIndex(
+                name: "IX_ActionEmployees_EmployeeID",
+                table: "ActionEmployees",
+                column: "EmployeeID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -332,20 +332,20 @@ namespace ReservationsManager.DAL.Migrations
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
-            //migrationBuilder.CreateIndex(
-            //    name: "IX_Reservations_ActionEmployeeID",
-            //    table: "Reservations",
-            //    column: "ActionEmployeeID");
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_ActionEmployeeID",
+                table: "Reservations",
+                column: "ActionEmployeeID");
 
-            //migrationBuilder.CreateIndex(
-            //    name: "IX_Reservations_TimeBlockID",
-            //    table: "Reservations",
-            //    column: "TimeBlockID");
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_TimeBlockID",
+                table: "Reservations",
+                column: "TimeBlockID");
 
-            //migrationBuilder.CreateIndex(
-            //    name: "IX_Reservations_UserID",
-            //    table: "Reservations",
-            //    column: "UserID");
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservations_UserID",
+                table: "Reservations",
+                column: "UserID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -365,11 +365,11 @@ namespace ReservationsManager.DAL.Migrations
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
 
-            //migrationBuilder.DropTable(
-            //    name: "Reservations");
+            migrationBuilder.DropTable(
+                name: "Reservations");
 
-            //migrationBuilder.DropTable(
-            //    name: "UserCredentials");
+            migrationBuilder.DropTable(
+                name: "UserCredentials");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -377,20 +377,20 @@ namespace ReservationsManager.DAL.Migrations
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            //migrationBuilder.DropTable(
-            //    name: "ActionEmployees");
+            migrationBuilder.DropTable(
+                name: "ActionEmployees");
 
-            //migrationBuilder.DropTable(
-            //    name: "TimeBlocks");
+            migrationBuilder.DropTable(
+                name: "TimeBlocks");
 
-            //migrationBuilder.DropTable(
-            //    name: "Users");
+            migrationBuilder.DropTable(
+                name: "Users");
 
-            //migrationBuilder.DropTable(
-            //    name: "Actions");
+            migrationBuilder.DropTable(
+                name: "Actions");
 
-            //migrationBuilder.DropTable(
-            //    name: "Employees");
+            migrationBuilder.DropTable(
+                name: "Employees");
         }
     }
 }

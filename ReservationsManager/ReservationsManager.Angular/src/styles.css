@@ -27,3 +27,8 @@
   border-width: 1px;
   padding: 9px 9px;
 }
+
+.container {
+  width: 90%;
+  margin: auto;
+}

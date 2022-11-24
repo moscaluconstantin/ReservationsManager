@@ -11,5 +11,6 @@ namespace ReservationsManager.Common.Dtos.Reservations
         public DateTime Date { get; set; }
         public TimeBlock StartTimeBlock { get; set; }
         public TimeBlock EndTimeBlock { get; set; }
+        public bool Canceled { get; set; }
     }
 }

@@ -12,5 +12,7 @@
 
         public int TimeBlockID { get; set; }
         public TimeBlock TimeBlock { get; set; }
+
+        public bool Canceled { get; set; }
     }
 }

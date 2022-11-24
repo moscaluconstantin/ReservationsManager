@@ -8,7 +8,8 @@ namespace ReservationsManager.BLL.Profiles
     {
         public ReservationProfile()
         {
-            CreateMap<ReservationToAddDto, Reservation>();
+            CreateMap<ReservationToAddDto, Reservation>()
+                .ForMember(x => x.Canceled, y => y.MapFrom(z => false));
 
             CreateMap<Reservation, RawReservationDto>()
                 .ForMember(x => x.Employee, y => y.MapFrom(z => z.ActionEmployee.Employee))
@@ -29,8 +30,7 @@ namespace ReservationsManager.BLL.Profiles
             CreateMap<RawReservationDto, EmployeeReservationDto>()
                 .ForMember(x => x.UserName, y => y.MapFrom(z => z.User.Name))
                 .ForMember(x => x.ActionName, y => y.MapFrom(z => z.Action.Name))
-                .ForMember(x => x.StartTime, y => y.MapFrom(z => z.StartTimeBlock.StartTime))
-                .ForMember(x => x.Canceled, y => y.MapFrom(z => false));
+                .ForMember(x => x.StartTime, y => y.MapFrom(z => z.StartTimeBlock.StartTime));
         }
     }
 }

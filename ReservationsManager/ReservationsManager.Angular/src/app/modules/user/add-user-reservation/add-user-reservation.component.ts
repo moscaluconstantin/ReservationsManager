@@ -10,6 +10,7 @@ import { EmployeeService } from 'src/app/_services/Employee/employee.service';
 import { ReservationsService } from 'src/app/_services/Reservations/reservations.service';
 import { DatePipe } from '@angular/common';
 import { finalize } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-user-reservation',
@@ -56,7 +57,8 @@ export class AddUserReservationComponent implements OnInit {
     private actionsService: ActionsService,
     private employeeService: EmployeeService,
     private reservationsService: ReservationsService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -77,7 +79,7 @@ export class AddUserReservationComponent implements OnInit {
     this.reservationsService
       .addReservation(reservationRequest)
       .pipe(finalize(() => (this.sending = false)))
-      .subscribe();
+      .subscribe(() => this.router.navigate(['account/user/reservations']));
   }
 
   onActionChanged(): void {

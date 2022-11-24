@@ -13,6 +13,7 @@ import { AuthGuard } from './_guards/auth.guard';
 import { AuthInterceptor } from './_interceptors/auth/auth.interceptor';
 import { DatePipe } from '@angular/common';
 import { LoadingInterceptor } from './_interceptors/loading/loading.interceptor';
+import { EmployeeModule } from './modules/employee/employee.module';
 
 const modules = [
   BrowserModule,
@@ -23,6 +24,7 @@ const modules = [
   RegisterUserModule,
   RegisterEmployeeModule,
   UserModule,
+  EmployeeModule,
 ];
 
 @NgModule({

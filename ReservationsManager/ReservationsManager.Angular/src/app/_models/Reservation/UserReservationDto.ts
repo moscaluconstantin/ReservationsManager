@@ -3,6 +3,7 @@ export class UserReservationDto {
     public employeeName: string,
     public actionName: string,
     public date: Date,
-    public startTime: string
+    public startTime: string,
+    public canceled: boolean
   ) {}
 }

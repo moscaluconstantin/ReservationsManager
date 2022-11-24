@@ -3,23 +3,6 @@ table {
   margin-bottom: 30px;
 }
 
-/* mat-header-cell,
-mat-cell {
-  justify-content: center;
-} */
-
-.mat-column-canceled {
-  width: 70px;
-}
-
-.mat-column-button {
-  width: 64px;
-}
-
 .canceled-row {
   background-color: red;
-}
-
-.canceled-row span {
-  color: white;
 }

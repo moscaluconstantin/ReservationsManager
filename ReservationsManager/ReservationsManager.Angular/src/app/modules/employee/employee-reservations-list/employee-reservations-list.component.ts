@@ -10,7 +10,7 @@ import { ReservationsService } from 'src/app/_services/Reservations/reservations
 })
 export class EmployeeReservationsListComponent implements OnInit {
   reservations: Array<EmployeeReservationDto>;
-  columnsToDisplay = ['user', 'action', 'date', 'time', 'canceled', 'button'];
+  columnsToDisplay = ['user', 'action', 'date', 'time', 'status', 'button'];
 
   constructor(private reservationsService: ReservationsService) {
     this.reservations = new Array<EmployeeReservationDto>();

@@ -32,3 +32,11 @@
   width: 90%;
   margin: auto;
 }
+
+.mat-column-status {
+  width: 70px;
+}
+
+.mat-column-button {
+  width: 64px;
+}

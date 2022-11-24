@@ -25,6 +25,7 @@ namespace ReservationsManager.DAL.Repositories
             .Include(x => x.ActionEmployee.Employee)
             .Include(x => x.ActionEmployee.Action)
             .Include(x => x.TimeBlock)
+            .Where(x => x.UserID == userId)
             .OrderBy(x => x.Date)
             .ToListAsync();
 
